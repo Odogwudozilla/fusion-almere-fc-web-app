@@ -1,0 +1,127 @@
+fusion-almere-fc
+|-- backend
+|   |-- HELP.md
+|   |-- build.gradle.kts
+|   |-- gradle
+|   |   `-- wrapper
+|   |       |-- gradle-wrapper.jar
+|   |       `-- gradle-wrapper.properties
+|   |-- gradlew
+|   |-- gradlew.bat
+|   |-- logs
+|   |   |-- fusion-almere-fc.2024-11-15.log
+|   |   |-- fusion-almere-fc.2024-11-16.log
+|   |   `-- fusion-almere-fc.log
+|   |-- settings.gradle.kts
+|   `-- src
+|       |-- main
+|       |   |-- java
+|       |   |   `-- com
+|       |   |       `-- fusionalmerefc
+|       |   |           |-- FusionAlmereFcApplication.java
+|       |   |           |-- config
+|       |   |           |   `-- SecurityConfig.java
+|       |   |           |-- controller
+|       |   |           |   |-- FusionAlmereFcController.java
+|       |   |           |   |-- PermissionController.java
+|       |   |           |   `-- RoleController.java
+|       |   |           |-- model
+|       |   |           |   |-- BaseEntity.java
+|       |   |           |   |-- Permission.java
+|       |   |           |   |-- Role.java
+|       |   |           |   |-- RolePermission.java
+|       |   |           |   |-- Status.java
+|       |   |           |   |-- User.java
+|       |   |           |   `-- UserRole.java
+|       |   |           |-- repository
+|       |   |           |   |-- BaseRepository.java
+|       |   |           |   |-- PermissionRepository.java
+|       |   |           |   |-- RolePermissionRepository.java
+|       |   |           |   |-- RoleRepository.java
+|       |   |           |   |-- UserRepository.java
+|       |   |           |   `-- UserRoleRepository.java
+|       |   |           `-- service
+|       |   |               |-- BaseService.java
+|       |   |               |-- PermissionService.java
+|       |   |               |-- RoleService.java
+|       |   |               |-- UserService.java
+|       |   |               `-- impl
+|       |   |                   |-- BaseServiceImpl.java
+|       |   |                   |-- PermissionServiceImpl.java
+|       |   |                   |-- RoleServiceImpl.java
+|       |   |                   `-- UserServiceImpl.java
+|       |   `-- resources
+|       |       |-- application-dev.properties
+|       |       |-- application.properties
+|       |       |-- logback-spring.xml
+|       |       |-- static
+|       |       |   |-- asset-manifest.json
+|       |       |   |-- favicon.ico
+|       |       |   |-- index.html
+|       |       |   |-- logo192.png
+|       |       |   |-- logo512.png
+|       |       |   |-- manifest.json
+|       |       |   |-- robots.txt
+|       |       |   `-- static
+|       |       `-- templates
+|       `-- test
+|           |-- java
+|           |   `-- com
+|           |       `-- fusionalmerefc
+|           |           |-- backend
+|           |           |   `-- BackendApplicationTests.java
+|           |           |-- repository
+|           |           |   |-- PermissionRepositoryTest.java
+|           |           |   |-- RolePermissionRepositoryTest.java
+|           |           |   |-- RoleRepositoryTest.java
+|           |           |   |-- UserRepositoryTest.java
+|           |           |   `-- UserRoleRepositoryTest.java
+|           |           `-- service
+|           `-- resources
+|               |-- application-test.properties
+|               `-- application.properties
+|-- frontend
+|   |-- README.md
+|   |-- package-lock.json
+|   |-- package.json
+|   |-- public
+|   |   |-- favicon.ico
+|   |   |-- index.html
+|   |   |-- logo192.png
+|   |   |-- logo512.png
+|   |   |-- manifest.json
+|   |   `-- robots.txt
+|   `-- src
+|       |-- App.css
+|       |-- App.js
+|       |-- App.test.js
+|       |-- components
+|       |   |-- Layout.css
+|       |   |-- Layout.js
+|       |   |-- permission
+|       |   |   |-- PermissionForm.js
+|       |   |   |-- PermissionList.js
+|       |   |   `-- PermissionManagement.js
+|       |   |-- role
+|       |   |   |-- RoleForm.js
+|       |   |   |-- RoleList.js
+|       |   |   `-- RoleManagement.js
+|       |   `-- styles
+|       |       |-- Form.css
+|       |       `-- List.css
+|       |-- index.css
+|       |-- index.js
+|       |-- logo.svg
+|       |-- pages
+|       |   |-- ContactUs.js
+|       |   |-- Home.js
+|       |   `-- LoginRegister.js
+|       |-- reportWebVitals.js
+|       `-- setupTests.js
+|-- logs
+|   |-- fusion-almere-fc.2024-11-16.log
+|   |-- fusion-almere-fc.2024-11-17.log
+|   `-- fusion-almere-fc.log
+`-- structure.txt
+
+36 directories, 88 files

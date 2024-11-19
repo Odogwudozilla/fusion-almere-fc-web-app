@@ -1,0 +1,127 @@
+2024-11-16 19:54:14 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Starting FusionAlmereFcApplication using Java 17.0.9 with PID 31828 (C:\Users\Chidozie\gitRepo\fusion-almere-fc\backend\build\classes\java\main started by Chidozie in C:\Users\Chidozie\gitRepo\fusion-almere-fc)
+2024-11-16 19:54:14 [restartedMain] DEBUG c.f.FusionAlmereFcApplication - Running with Spring Boot v3.3.5, Spring v6.1.14
+2024-11-16 19:54:14 [restartedMain] INFO  c.f.FusionAlmereFcApplication - The following 1 profile is active: "dev"
+2024-11-16 19:54:17 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-16 19:54:17 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-16 19:54:17 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.31]
+2024-11-16 19:54:17 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-16 19:54:17 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-16 19:54:17 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-16 19:54:17 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-16 19:54:18 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-16 19:54:18 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@760084fb
+2024-11-16 19:54:18 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-16 19:54:18 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-16 19:54:20 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-16 19:54:21 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-16 19:54:21 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 4387260a-39d1-4ccd-8004-edabf56c5081
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-11-16 19:54:21 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-16 19:54:22 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Started FusionAlmereFcApplication in 8.305 seconds (process running for 9.38)
+2024-11-16 20:04:54 [http-nio-8080-exec-5] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-11-16 22:26:37 [Thread-5] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-11-16 22:26:38 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-11-16 22:26:38 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-11-16 22:26:38 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Starting FusionAlmereFcApplication using Java 17.0.9 with PID 31828 (C:\Users\Chidozie\gitRepo\fusion-almere-fc\backend\build\classes\java\main started by Chidozie in C:\Users\Chidozie\gitRepo\fusion-almere-fc)
+2024-11-16 22:26:38 [restartedMain] DEBUG c.f.FusionAlmereFcApplication - Running with Spring Boot v3.3.5, Spring v6.1.14
+2024-11-16 22:26:38 [restartedMain] INFO  c.f.FusionAlmereFcApplication - The following 1 profile is active: "dev"
+2024-11-16 22:26:38 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-16 22:26:38 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-16 22:26:38 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.31]
+2024-11-16 22:26:38 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-16 22:26:39 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-16 22:26:39 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-16 22:26:39 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-11-16 22:26:39 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@33e319f8
+2024-11-16 22:26:39 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-11-16 22:26:39 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-16 22:26:39 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-16 22:26:39 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-16 22:26:39 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 1566900f-9f65-4141-85bd-0006942d65e8
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-11-16 22:26:39 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-16 22:26:39 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Started FusionAlmereFcApplication in 1.518 seconds (process running for 9147.099)
+2024-11-16 22:26:54 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Starting FusionAlmereFcApplication using Java 17.0.9 with PID 4428 (C:\Users\Chidozie\gitRepo\fusion-almere-fc\backend\build\classes\java\main started by Chidozie in C:\Users\Chidozie\gitRepo\fusion-almere-fc)
+2024-11-16 22:26:54 [restartedMain] DEBUG c.f.FusionAlmereFcApplication - Running with Spring Boot v3.3.5, Spring v6.1.14
+2024-11-16 22:26:54 [restartedMain] INFO  c.f.FusionAlmereFcApplication - The following 1 profile is active: "dev"
+2024-11-16 22:26:56 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-16 22:26:56 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-16 22:26:56 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.31]
+2024-11-16 22:26:56 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-16 22:26:56 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-16 22:26:57 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-16 22:26:57 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-16 22:26:57 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-16 22:26:57 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6df243d0
+2024-11-16 22:26:57 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-16 22:26:57 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-16 22:26:58 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-16 22:26:59 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-16 22:26:59 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: b3032071-194a-4c43-9c8e-c16c96745d92
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-11-16 22:27:00 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-16 22:27:01 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Started FusionAlmereFcApplication in 7.612 seconds (process running for 8.616)
+2024-11-16 22:27:02 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-11-16 23:36:41 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Starting FusionAlmereFcApplication using Java 17.0.9 with PID 28132 (C:\Users\Chidozie\gitRepo\fusion-almere-fc\backend\build\classes\java\main started by Chidozie in C:\Users\Chidozie\gitRepo\fusion-almere-fc)
+2024-11-16 23:36:41 [restartedMain] DEBUG c.f.FusionAlmereFcApplication - Running with Spring Boot v3.3.5, Spring v6.1.14
+2024-11-16 23:36:41 [restartedMain] INFO  c.f.FusionAlmereFcApplication - The following 1 profile is active: "dev"
+2024-11-16 23:36:44 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-16 23:36:44 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-16 23:36:44 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.31]
+2024-11-16 23:36:44 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-16 23:36:44 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-16 23:36:44 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-16 23:36:44 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-16 23:36:45 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-16 23:36:45 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5bae7be1
+2024-11-16 23:36:45 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-16 23:36:45 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-16 23:36:46 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-16 23:36:47 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-16 23:36:47 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 249be368-8408-482a-be20-780c1c2b779a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-11-16 23:36:48 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-16 23:36:48 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Started FusionAlmereFcApplication in 7.757 seconds (process running for 8.584)
+2024-11-16 23:36:50 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-11-16 23:42:43 [Thread-5] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-11-16 23:42:43 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-11-16 23:42:43 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-11-16 23:42:43 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Starting FusionAlmereFcApplication using Java 17.0.9 with PID 28132 (C:\Users\Chidozie\gitRepo\fusion-almere-fc\backend\build\classes\java\main started by Chidozie in C:\Users\Chidozie\gitRepo\fusion-almere-fc)
+2024-11-16 23:42:43 [restartedMain] DEBUG c.f.FusionAlmereFcApplication - Running with Spring Boot v3.3.5, Spring v6.1.14
+2024-11-16 23:42:43 [restartedMain] INFO  c.f.FusionAlmereFcApplication - The following 1 profile is active: "dev"
+2024-11-16 23:42:44 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-16 23:42:44 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-16 23:42:44 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.31]
+2024-11-16 23:42:44 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-16 23:42:44 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-16 23:42:44 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-16 23:42:44 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-11-16 23:42:44 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@1ec801bf
+2024-11-16 23:42:44 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-11-16 23:42:44 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-16 23:42:45 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-16 23:42:45 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-16 23:42:45 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: bc74ae38-920f-4702-93d4-8a4480a4b64a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-11-16 23:42:46 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-16 23:42:46 [restartedMain] INFO  c.f.FusionAlmereFcApplication - Started FusionAlmereFcApplication in 2.212 seconds (process running for 365.77)

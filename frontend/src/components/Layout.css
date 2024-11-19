@@ -1,0 +1,105 @@
+/* Layout.css */
+
+/* Ensure the footer stays at the bottom */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Main content should take the remaining space */
+main {
+    min-height: 80vh; /* Ensure main content fills up space */
+    padding-bottom: 20px; /* Add space to prevent overlay */
+}
+
+/* Form elements spacing */
+.form-label {
+    margin-top: 10px;
+}
+
+/* Add some margin to the footer */
+footer {
+    margin-top: 20px;
+}
+
+.maincontainer {
+    margin: 20px;
+}
+
+/* Center form content */
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+/* Input-group adjustments */
+.input-group {
+    margin-bottom: 10px;
+}
+
+.form-control {
+    width: 100%; /* Ensure input fields span the full container width */
+}
+
+/* Styling links inside forms to switch between login/register */
+.form-switch-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.form-switch-link:hover {
+    text-decoration: underline;
+}
+
+.management-screen {
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        margin: 10px;
+    }
+}
+
+
+/* General styling for the permission management screen */
+.management-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Styling for larger screens */
+@media (min-width: 768px) {
+    .management-screen {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .management-screen-form-container {
+        flex: 1;
+        max-width: 30%;
+    }
+
+    .management-screen-list-container {
+        flex: 2;
+        margin-left: 20px;
+    }
+}
+
+/* Styling for buttons */
+.management-screen-form button,
+.management-screen-list button {
+    margin: 5px;
+}
+
+/* Responsive form fields */
+.management-screen-form input,
+.management-screen-form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
