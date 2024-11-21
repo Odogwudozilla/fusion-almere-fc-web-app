@@ -73,5 +73,17 @@ public abstract class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
         }
         return result;
     }
+
+    public ServiceResult<Optional<T>> findByExternalIdentifier(String externalIdentifier) {
+        ServiceResult<Optional<T>> result = new ServiceResult<>();
+        try {
+            Optional<T> entity = ((BaseRepository<T, ID>) repository).findByExternalIdentifier(externalIdentifier);
+            result.setData(entity);
+        } catch (Exception ex) {
+            result.setSuccess(false);
+            result.setApiError(new ApiError("Error finding entity by externalIdentifier: " + ex.getMessage(), ApiErrorSeverity.ERROR));
+        }
+        return result;
+    }
     
 }

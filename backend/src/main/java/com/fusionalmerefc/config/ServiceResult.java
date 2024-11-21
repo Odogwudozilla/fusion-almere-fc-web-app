@@ -1,5 +1,7 @@
 package com.fusionalmerefc.config;
 
+import java.util.function.Supplier;
+
 public class ServiceResult<T> {
     private boolean success;
     private T data;
@@ -31,5 +33,16 @@ public class ServiceResult<T> {
 
     public void setApiError(ApiError apiError) {
         this.apiError = apiError;
+    }
+
+    public boolean hasData() {
+        return success && data != null;
+    }
+
+    public T orElseThrow(Supplier<RuntimeException> exceptionSupplier) {
+        if (!hasData()) {
+            throw exceptionSupplier.get();
+        }
+        return data;
     }
 }

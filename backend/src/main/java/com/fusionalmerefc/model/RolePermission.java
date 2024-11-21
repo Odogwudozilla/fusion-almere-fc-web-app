@@ -12,12 +12,12 @@ import jakarta.persistence.*;
 @ToString
 public class RolePermission extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "permission_id", nullable = false)
     private Permission permission;
-    
+
 }

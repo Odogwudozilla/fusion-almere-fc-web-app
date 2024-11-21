@@ -19,8 +19,8 @@ public class Permission extends BaseEntity{
 
     @Column(nullable = false)
     private String description;
-
-    @Column(name = "external_identifier")
-    private String externalIdentifier;
+    
+    @Column(name = "is_for_super_user_only", nullable = false)
+    private boolean isForSuperUserOnly;
 
 }

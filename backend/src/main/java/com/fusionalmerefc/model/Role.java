@@ -19,7 +19,17 @@ public class Role extends BaseEntity {
 
     @Column(nullable = false)
     private String description;
-    
-    @Column(name = "external_identifier")
-    private String externalIdentifier;
+
+    @Column(name = "is_super_user", nullable = false)
+    private boolean isSuperUser;
+
+    // Getter and Setter for isSuperUser
+    public Boolean getIsSuperUser() {
+        return isSuperUser;
+    }
+
+    public void setIsSuperUser(Boolean isSuperUser) {
+        this.isSuperUser = isSuperUser;
+    }
 }
+

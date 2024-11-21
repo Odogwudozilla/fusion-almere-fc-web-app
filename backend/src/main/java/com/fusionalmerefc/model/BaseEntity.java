@@ -9,7 +9,11 @@ public abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "uuid", nullable = false, updatable = false)
     private UUID uuid;
+    
+    @Column(name = "external_identifier")
+    private String externalIdentifier;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -51,5 +55,13 @@ public abstract class BaseEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    
+    public String getExternalIdentifier() {
+        return externalIdentifier;
+    }
+    
+    public void setExternalIdentifier(String externalIdentifier) {
+        this.externalIdentifier = externalIdentifier;
     }
 }
