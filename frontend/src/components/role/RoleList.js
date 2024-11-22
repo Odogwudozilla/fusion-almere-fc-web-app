@@ -14,12 +14,12 @@ const RoleList = ({ onEditClick, notify }) => {
             .catch((error) => console.error("Error fetching roles:", error));
     }, []);
 
-    const handleDelete = (id) => {
-        fetch(`/api/roles/${id}`, { method: "DELETE" })
+    const handleDelete = (externalIdentifier) => {
+        fetch(`/api/roles/${externalIdentifier}`, { method: "DELETE" })
             .then((response) => {
                 if (response.ok) {
                     notify("Role deleted successfully!", "success");
-                    setRoles(roles.filter((role) => role.uuid !== id));
+                    setRoles(roles.filter((role) => role.externalIdentifier !== externalIdentifier));
                 } else {
                     notify("Failed to delete role. Please try again.", "error");
                 }
@@ -48,30 +48,42 @@ const RoleList = ({ onEditClick, notify }) => {
                         <th>Name</th>
                         <th>External Identifier</th>
                         {showDescription && <th>Description</th>} {/* Conditionally render Description column */}
+                        <th>Is for Super User</th>
+                        <th>Assigned Permissions</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {roles.map((role, index) => (
-                        <tr key={role.uuid}>
+                        <tr key={role.externalIdentifier}>
                             <td>{index + 1}</td>
                             <td>{role.name}</td>
                             <td>{role.externalIdentifier}</td>
                             {showDescription && <td>{role.description}</td>} {/* Conditionally render Description data */}
+                            <td>{role.isSuperUser === true ? "True" : "False"}</td>
+                            <td>
+                                {role.assignedPermissions && role.assignedPermissions.length > 0
+                                    ? role.assignedPermissions.map((permission) => (
+                                        <div key={permission.externalIdentifier}>
+                                            {permission.name}
+                                        </div>
+                                    ))
+                                    : "None"}
+                            </td>
                             <td>
                                 <button
                                     onClick={() => onEditClick(role)}
                                     className="btn btn-secondary"
-                                    title="Edit" 
+                                    title="Edit"
                                 >
-                                    <FontAwesomeIcon icon={faEdit} /> 
+                                    <FontAwesomeIcon icon={faEdit} />
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(role.uuid)}
+                                    onClick={() => handleDelete(role.externalIdentifier)}
                                     className="btn btn-danger"
-                                    title="Delete" 
+                                    title="Delete"
                                 >
-                                    <FontAwesomeIcon icon={faTrashAlt} /> 
+                                    <FontAwesomeIcon icon={faTrashAlt} />
                                 </button>
                             </td>
                         </tr>

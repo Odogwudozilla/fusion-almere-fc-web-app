@@ -1,49 +1,148 @@
+/* Form container and inputs */
 .form-container {
-    background-color: #f9f9f9;
+    max-width: 600px;
+    margin: auto;
     padding: 20px;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-title {
-    margin-bottom: 15px;
-    font-size: 1.5rem;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 .form-group {
     margin-bottom: 15px;
+    font-size: 1.2rem;
 }
 
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.form-group input {
+input[type="text"] {
     width: 100%;
     padding: 8px;
-    font-size: 1rem;
+    margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
+/* Permissions section */
+.permissions-group {
+    margin-bottom: 20px;
+}
+
+.permissions-group-title {
+    font-size: 1.0rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.permissions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.permission-item {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.permission-label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #007bff; /* Optional: Customize checkbox color */
+    border-radius: 4px; /* Optional: Rounded edges */
+}
+
+.gradient-hr {
+    border: none;
+    height: 4px;
+    background: linear-gradient(to right, red, orange, yellow);
+    margin: 20px auto;
+    width: 100%;
+  }
+
+.custom-hr {
+    border: none; /* Removes the default border */
+    height: 2px; /* Thickness of the line */
+    background-color: #000; /* Line color */
+    margin: 20px 0; /* Space around the line */
+    width: 50%; /* Length of the line */
+}
+
+
+
+/* Error messages */
+.error-messages {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.error-message {
+    margin: 5px 0;
+}
+
+/* Action buttons */
 .form-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: space-between;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
 }
 
 .btn-primary {
     background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
 }
 
 .btn-primary:hover {
     background-color: #0056b3;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px; /* Adds some vertical spacing */
+}
+
+.form-group-checkbox label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500; /* Optional: makes the label slightly bold */
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-left: 10px;
+    cursor: pointer;
+    accent-color: #007bff; /* Changes the checkbox color to a nicer shade */
+    border-radius: 4px; /* Gives the checkbox a softer edge */
 }

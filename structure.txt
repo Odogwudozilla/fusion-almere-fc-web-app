@@ -11,6 +11,7 @@ fusion-almere-fc
 |   |-- logs
 |   |   |-- fusion-almere-fc.2024-11-15.log
 |   |   |-- fusion-almere-fc.2024-11-16.log
+|   |   |-- fusion-almere-fc.2024-11-18.log
 |   |   `-- fusion-almere-fc.log
 |   |-- settings.gradle.kts
 |   `-- src
@@ -20,7 +21,10 @@ fusion-almere-fc
 |       |   |       `-- fusionalmerefc
 |       |   |           |-- FusionAlmereFcApplication.java
 |       |   |           |-- config
-|       |   |           |   `-- SecurityConfig.java
+|       |   |           |   |-- ApiError.java
+|       |   |           |   |-- ApiErrorSeverity.java
+|       |   |           |   |-- SecurityConfig.java
+|       |   |           |   `-- ServiceResult.java
 |       |   |           |-- controller
 |       |   |           |   |-- FusionAlmereFcController.java
 |       |   |           |   |-- PermissionController.java
@@ -98,6 +102,7 @@ fusion-almere-fc
 |       |-- components
 |       |   |-- Layout.css
 |       |   |-- Layout.js
+|       |   |-- Notification.js
 |       |   |-- permission
 |       |   |   |-- PermissionForm.js
 |       |   |   |-- PermissionList.js
@@ -108,7 +113,8 @@ fusion-almere-fc
 |       |   |   `-- RoleManagement.js
 |       |   `-- styles
 |       |       |-- Form.css
-|       |       `-- List.css
+|       |       |-- List.css
+|       |       `-- Notification.css
 |       |-- index.css
 |       |-- index.js
 |       |-- logo.svg
@@ -121,7 +127,8 @@ fusion-almere-fc
 |-- logs
 |   |-- fusion-almere-fc.2024-11-16.log
 |   |-- fusion-almere-fc.2024-11-17.log
+|   |-- fusion-almere-fc.2024-11-18.log
 |   `-- fusion-almere-fc.log
 `-- structure.txt
 
-36 directories, 88 files
+36 directories, 95 files

@@ -5,6 +5,7 @@ const PermissionForm = ({ permission, onClose, onSave, notify }) => {
     const [externalIdentifier, setExternalIdentifier] = useState(permission ? permission.externalIdentifier : "");
     const [name, setName] = useState(permission ? permission.name : "");
     const [description, setDescription] = useState(permission ? permission.description : "");
+    const [isForSuperUserOnly, setIsForSuperUserOnly] = useState(permission ? permission.isForSuperUserOnly : false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -14,16 +15,17 @@ const PermissionForm = ({ permission, onClose, onSave, notify }) => {
         fetch(url, {
             method,
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ externalIdentifier, name, description }),
-        }).then((response) => {
-            if (response.ok) {
-                notify(permission ? "Permission updated successfully!" : "Permission added successfully!", "success");
-                    onSave();
-            } else {
-                notify("Failed to save Permission. Please try again.", "error");
-            }
+            body: JSON.stringify({ externalIdentifier, name, description, isForSuperUserOnly }),
         })
-        .catch(() => notify("An unexpected error occurred.", "error"));
+            .then((response) => {
+                if (response.ok) {
+                    notify(permission ? "Permission updated successfully!" : "Permission added successfully!", "success");
+                    onSave();
+                } else {
+                    notify("Failed to save Permission. Please try again.", "error");
+                }
+            })
+            .catch(() => notify("An unexpected error occurred.", "error"));
     };
 
     return (
@@ -58,6 +60,18 @@ const PermissionForm = ({ permission, onClose, onSave, notify }) => {
                     onChange={(e) => setDescription(e.target.value)}
                 />
             </div>
+            <div className="form-group form-group-checkbox">
+                <label htmlFor="isForSuperUserOnly">
+                    <span>Superuser Only</span>
+                    <input
+                        type="checkbox"
+                        id="isForSuperUserOnly"
+                        checked={isForSuperUserOnly}
+                        onChange={(e) => setIsForSuperUserOnly(e.target.checked)}
+                    />
+                </label>
+            </div>
+
             <div className="form-actions">
                 <button type="submit" className="btn btn-primary">
                     Save

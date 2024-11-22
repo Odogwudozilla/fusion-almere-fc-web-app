@@ -53,6 +53,7 @@ const PermissionList = ({ onEditClick, notify}) => {
                         <th>Name</th>
                         <th>External Identifier</th>
                         {showDescription && <th>Description</th>}
+                        <th>Is for super user</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -63,6 +64,7 @@ const PermissionList = ({ onEditClick, notify}) => {
                             <td>{permission.name}</td>
                             <td>{permission.externalIdentifier}</td>
                             {showDescription && <td>{permission.description}</td>}
+                            <td>{permission.isForSuperUserOnly === true ? "True" : "False"}</td>
                             <td>
                                 <button
                                     onClick={() => handleEdit(permission)} // Call the fallback function or provided one
