@@ -1,6 +1,9 @@
 package com.fusionalmerefc.model;
 
 import lombok.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,7 +24,10 @@ public class Role extends BaseEntity {
     private String description;
 
     @Column(name = "is_super_user", nullable = false)
+    @JsonProperty("isSuperUser") // Explicit mapping
     private boolean isSuperUser;
+
+    
 
     // Getter and Setter for isSuperUser
     public Boolean getIsSuperUser() {

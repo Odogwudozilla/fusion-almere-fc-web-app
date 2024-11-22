@@ -43,3 +43,6 @@ node_modules/
 build/
 dist/
 .DS_Store
+../backend/src/main/resources/static/static/
+logs/
+

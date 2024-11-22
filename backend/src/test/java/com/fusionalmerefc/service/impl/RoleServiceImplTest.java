@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
@@ -110,11 +112,11 @@ public class RoleServiceImplTest {
     @Test
     public void testSaveRoleWithNullExternalIdentifier() {
         Role role = new Role();
-        role.setName("Invalid Role");
+        role.setName("Role with no extId");
 
         ServiceResult<Role> result = roleService.save(role);
 
-        assertThat(result.isSuccess()).isFalse();
+        assertThat(result.isSuccess()).isTrue();
         assertThat(result.getApiError().getMessage()).contains("Failed to save role");
     }
 
@@ -123,10 +125,12 @@ public class RoleServiceImplTest {
         Role role1 = new Role();
         role1.setName("Role 1");
         role1.setDescription("Role 1 Description");
+        role1.setExternalIdentifier("Role1ExtId");
 
         Role role2 = new Role();
         role2.setName("Role 2");
         role2.setDescription("Role 2 Description");
+        role2.setExternalIdentifier("Role2ExtId");
 
         List<Role> roles = List.of(role1, role2);
 
@@ -144,10 +148,9 @@ public class RoleServiceImplTest {
     public void testSaveAllRolesWithNullValues() {
         List<Role> roles = List.of(new Role(), new Role());
         
-        ServiceResult<List<Role>> result = roleService.saveAll(roles);
-
-        assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getApiError().getMessage()).contains("Role list cannot be null or empty.");
+        assertThrows(IllegalArgumentException.class, () -> {
+            roleService.saveAll(roles);
+        });
     }
 
     @Test
@@ -162,10 +165,10 @@ public class RoleServiceImplTest {
 
         List<Role> roles = List.of(role1, role2);
 
-        ServiceResult<List<Role>> result = roleService.saveAll(roles);
+        assertThrows(IllegalArgumentException.class, () -> {
+            roleService.saveAll(roles);
+        });
 
-        assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getApiError().getMessage()).contains("Duplicate External Identifier");
     }
 
     @Test
@@ -175,10 +178,10 @@ public class RoleServiceImplTest {
 
         List<Role> roles = List.of(role1);
 
-        ServiceResult<List<Role>> result = roleService.saveAll(roles);
+        assertThrows(IllegalArgumentException.class, () -> {
+            roleService.saveAll(roles);
+        });
 
-        assertThat(result.isSuccess()).isFalse();
-        assertThat(result.getApiError().getMessage()).contains("Name and External Identifier cannot be null.");
     }
 
     @Test

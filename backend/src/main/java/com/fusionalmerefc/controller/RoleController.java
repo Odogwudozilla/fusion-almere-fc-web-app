@@ -1,9 +1,13 @@
 package com.fusionalmerefc.controller;
 
+import com.fusionalmerefc.DTOs.RoleDTO;
+import com.fusionalmerefc.DTOs.DTOMapper;
 import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
+import com.fusionalmerefc.model.Permission;
 import com.fusionalmerefc.model.Role;
+import com.fusionalmerefc.model.RolePermission;
 import com.fusionalmerefc.service.RoleService;
 import com.fusionalmerefc.service.PermissionService;
 import com.fusionalmerefc.service.RolePermissionService;
@@ -24,10 +28,12 @@ public class RoleController {
     private static final Logger log = LoggerFactory.getLogger(RoleController.class);
     private final RoleService roleService;
     private final RolePermissionService rolePermissionService;
+    private final DTOMapper dtoMapper;
 
-    public RoleController(RoleService roleService, RolePermissionService rolePermissionService, PermissionService permissionService) {
+    public RoleController(RoleService roleService, RolePermissionService rolePermissionService, PermissionService permissionService, DTOMapper dtoMapper) {
         this.roleService = roleService;
         this.rolePermissionService = rolePermissionService;
+        this.dtoMapper = dtoMapper;
     }
 
     @PostMapping("/bulk-add")
@@ -46,13 +52,18 @@ public class RoleController {
 
     @GetMapping
     public ResponseEntity<?> getAllRoles() {
+        // Fetch all roles
         ServiceResult<List<Role>> result = roleService.findAll();
 
+        // Handle errors
         if (!result.isSuccess()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.getApiError());
         }
 
-        return ResponseEntity.ok(result.getData());
+        // Convert roles to RoleDTOs
+        ServiceResult<List<RoleDTO>> dtoResult = roleService.convertRolesToRoleDTOs(result);
+
+        return ResponseEntity.ok(dtoResult.getData());
     }
 
     @GetMapping("/{id}")
@@ -72,11 +83,14 @@ public class RoleController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createRole(@RequestBody Role incomingRole) {
-        if (incomingRole.getName() == null || incomingRole.getName().isEmpty()) {
+    public ResponseEntity<?> createRole(@RequestBody RoleDTO incomingRoleDTO) {
+        if (incomingRoleDTO.getName() == null || incomingRoleDTO.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiError("Role name must not be empty", ApiErrorSeverity.INFO));
         }
+
+        // Convert incoming RoleDTO to Role entity
+        Role incomingRole = dtoMapper.convertToRole(incomingRoleDTO);
 
         // Save the Role
         ServiceResult<Role> result = roleService.save(incomingRole);
@@ -90,17 +104,21 @@ public class RoleController {
             log.info("Superuser role created: {}", result.getData().getName());
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(result.getData());
+        // Convert saved Role entity back to RoleDTO for the response
+        RoleDTO savedRoleDTO = dtoMapper.convertToRoleDTO(result.getData());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoleDTO);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateRole(@PathVariable UUID id, @RequestBody Role updatedRole) {
-        if (updatedRole.getName() == null || updatedRole.getName().isEmpty()) {
+    @PutMapping("/{externalIdentifier}")
+    public ResponseEntity<?> updateRole(@PathVariable String externalIdentifier, @RequestBody RoleDTO updatedRoleDTO) {
+        if (updatedRoleDTO.getName() == null || updatedRoleDTO.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiError("Role name must not be empty", ApiErrorSeverity.INFO));
         }
 
-        ServiceResult<Optional<Role>> existingRoleResult = roleService.findById(id);
+        // Find the existing Role entity by externalIdentifier
+        ServiceResult<Optional<Role>> existingRoleResult = roleService.findByExternalIdentifier(externalIdentifier);
 
         if (!existingRoleResult.isSuccess()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(existingRoleResult.getApiError());
@@ -108,38 +126,64 @@ public class RoleController {
 
         if (existingRoleResult.getData().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiError("Role not found with ID: " + id, ApiErrorSeverity.INFO));
+                .body(new ApiError("Role not found with External Identifier: " + externalIdentifier, ApiErrorSeverity.INFO));
         }
 
         Role existingRole = existingRoleResult.getData().get();
 
-        // Save the updated Role
+        // Map the incoming RoleDTO to the existing Role entity for update
+        dtoMapper.updateRoleFromDTO(existingRole, updatedRoleDTO);
+
+        List<Permission> assignedPermissions = roleService.findPermissionsByExternalIdentifier(updatedRoleDTO.getAssignedPermissions());
+        List<RolePermission> toBeSavedRolePermissions = dtoMapper.convertFromRoleDTO(existingRole, updatedRoleDTO, assignedPermissions);
+
+        // Save the updated Role entity
         ServiceResult<Role> saveResult = roleService.save(existingRole);
+        roleService.saveOrUpdateRolePermissions(toBeSavedRolePermissions);
 
         if (!saveResult.isSuccess()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(saveResult.getApiError());
         }
 
         // Log the update for a superuser role if necessary
-        if (updatedRole.getIsSuperUser()) {
+        if (updatedRoleDTO.getIsSuperUser()) {
             log.info("Updated role to superuser: {}", saveResult.getData().getName());
         }
 
-        return ResponseEntity.ok(saveResult.getData());
+        // Convert the updated Role entity back to RoleDTO for the response
+        RoleDTO updatedRoleDTOResponse = dtoMapper.convertToRoleDTO(saveResult.getData());
+
+        return ResponseEntity.ok(updatedRoleDTOResponse);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRole(@PathVariable UUID id) {
-        ServiceResult<Void> roleDeleteResult = roleService.deleteById(id);
+    @DeleteMapping("/{externalIdentifier}")
+    public ResponseEntity<?> deleteRole(@PathVariable String externalIdentifier) {
+        // Find the existing Role entity by externalIdentifier
+        ServiceResult<Optional<Role>> existingRoleResult = roleService.findByExternalIdentifier(externalIdentifier);
+
+        if (!existingRoleResult.isSuccess()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(existingRoleResult.getApiError());
+        }
+
+        if (existingRoleResult.getData().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiError("Role not found with External Identifier: " + externalIdentifier, ApiErrorSeverity.INFO));
+        }
+
+        Role existingRole = existingRoleResult.getData().get();
+
+        ServiceResult<Void> roleDeleteResult = roleService.deleteById(existingRole.getUuid());
         if (!roleDeleteResult.isSuccess()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(roleDeleteResult.getApiError());
         }
 
-        ServiceResult<Void> permissionDeleteResult = rolePermissionService.deleteById(id);
-        if (!permissionDeleteResult.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(permissionDeleteResult.getApiError());
+        ServiceResult<Void> rolePermissionDeleteResult = rolePermissionService.deleteById(existingRole.getUuid());
+        if (!rolePermissionDeleteResult.isSuccess()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rolePermissionDeleteResult.getApiError());
         }
 
         return ResponseEntity.noContent().build();
     }
+
+    
 }

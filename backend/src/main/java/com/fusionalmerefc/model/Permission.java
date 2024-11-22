@@ -1,6 +1,9 @@
 package com.fusionalmerefc.model;
 
 import lombok.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +24,7 @@ public class Permission extends BaseEntity{
     private String description;
     
     @Column(name = "is_for_super_user_only", nullable = false)
+    @JsonProperty("isForSuperUserOnly") // Explicit mapping
     private boolean isForSuperUserOnly;
 
 }
