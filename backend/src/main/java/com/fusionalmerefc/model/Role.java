@@ -27,8 +27,6 @@ public class Role extends BaseEntity {
     @JsonProperty("isSuperUser") // Explicit mapping
     private boolean isSuperUser;
 
-    
-
     // Getter and Setter for isSuperUser
     public Boolean getIsSuperUser() {
         return isSuperUser;

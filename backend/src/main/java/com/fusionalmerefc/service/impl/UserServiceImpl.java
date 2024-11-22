@@ -1,7 +1,7 @@
 package com.fusionalmerefc.service.impl;
 
-import com.fusionalmerefc.model.Status;
 import com.fusionalmerefc.model.User;
+import com.fusionalmerefc.model.constants.Status;
 import com.fusionalmerefc.repository.UserRepository;
 import com.fusionalmerefc.service.UserService;
 import org.springframework.stereotype.Service;

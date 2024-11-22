@@ -10,7 +10,7 @@ const PermissionForm = ({ permission, onClose, onSave, notify }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const method = permission ? "PUT" : "POST";
-        const url = permission ? `/api/permissions/${permission.uuid}` : "/api/permissions";
+        const url = permission ? `/api/permissions/${permission.externalIdentifier}` : "/api/permissions";
 
         fetch(url, {
             method,

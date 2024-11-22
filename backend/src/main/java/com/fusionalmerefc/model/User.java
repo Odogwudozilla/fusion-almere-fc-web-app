@@ -4,6 +4,9 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.fusionalmerefc.model.constants.MembershipType;
+import com.fusionalmerefc.model.constants.Status;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -37,8 +40,21 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MembershipType membershipType;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Column(name = "profile_picture_url")
+    private String profilePictureUrl;
+
+    @Column(name = "activated_at")
+    private LocalDateTime activatedAt;
+
+    @Column(name = "deactivated_at")
+    private LocalDateTime deactivatedAt;
 }
+

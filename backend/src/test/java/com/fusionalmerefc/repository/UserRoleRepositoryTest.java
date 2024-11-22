@@ -1,9 +1,9 @@
 package com.fusionalmerefc.repository;
 
 import com.fusionalmerefc.model.UserRole;
+import com.fusionalmerefc.model.constants.Status;
 import com.fusionalmerefc.model.User;
 import com.fusionalmerefc.model.Role;
-import com.fusionalmerefc.model.Status;
 
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;

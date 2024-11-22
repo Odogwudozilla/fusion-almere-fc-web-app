@@ -1,5 +1,7 @@
 package com.fusionalmerefc.controller;
 
+import com.fusionalmerefc.DTOs.DTOMapper;
+import com.fusionalmerefc.DTOs.PermissionDTO;
 import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
@@ -18,37 +20,27 @@ import java.util.UUID;
 public class PermissionController {
 
     private final PermissionService permissionService;
+    private final DTOMapper dtoMapper;
 
-    public PermissionController(PermissionService permissionService) {
+    public PermissionController(PermissionService permissionService, DTOMapper dtoMapper) {
         this.permissionService = permissionService;
+        this.dtoMapper = dtoMapper;
     }
 
     @PostMapping("/bulk-add")
     public ResponseEntity<?> bulkAddPermissions(@RequestBody List<Permission> permissions) {
-        ServiceResult<List<Permission>> result = permissionService.saveAll(permissions);
-
-        if (!result.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getApiError());
-        }
-
-        return ResponseEntity.ok(result.getData());
+        return handleServiceResult(permissionService.saveAll(permissions), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping
     public ResponseEntity<?> getAllPermissions() {
-        ServiceResult<List<Permission>> result = permissionService.findAll();
-
-        if (!result.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.getApiError());
-        }
-
-        return ResponseEntity.ok(result.getData());
+        return handleServiceResult(permissionService.findAll(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPermissionById(@PathVariable UUID id) {
         ServiceResult<Optional<Permission>> result = permissionService.findById(id);
-
+        
         if (!result.isSuccess()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.getApiError());
         }
@@ -59,51 +51,80 @@ public class PermissionController {
         }
 
         return ResponseEntity.ok(result.getData());
+
     }
 
     @PostMapping
-    public ResponseEntity<?> createPermission(@RequestBody Permission permission) {
-        ServiceResult<Permission> result = permissionService.save(permission);
-
-        if (!result.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getApiError());
+    public ResponseEntity<?> createPermission(@RequestBody PermissionDTO permissionDTO) {
+        if (permissionDTO.getExternalIdentifier() == null) {
+            return buildErrorResponse(HttpStatus.BAD_REQUEST,
+                    new ApiError("Permission externalIdentifier must not be empty", ApiErrorSeverity.INFO));
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(result.getData());
+        Permission permission = dtoMapper.convertToPermission(permissionDTO);
+        return handleServiceResult(permissionService.save(permission), HttpStatus.BAD_REQUEST, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updatePermission(@PathVariable UUID id, @RequestBody Permission updatedPermission) {
-        ServiceResult<Optional<Permission>> existingPermissionResult = permissionService.findById(id);
+    @PutMapping("/{externalIdentifier}")
+    public ResponseEntity<?> updatePermission(
+            @PathVariable String externalIdentifier,
+            @RequestBody PermissionDTO updatedPermissionDTO) {
 
-        if (!existingPermissionResult.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(existingPermissionResult.getApiError());
+        if (externalIdentifier == null || updatedPermissionDTO.getExternalIdentifier() == null) {
+            return buildErrorResponse(HttpStatus.BAD_REQUEST,
+                    new ApiError("Permission externalIdentifier must not be empty", ApiErrorSeverity.INFO));
         }
 
-        if (existingPermissionResult.getData() == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiError("Permission not found with ID: " + id, ApiErrorSeverity.INFO));
+        // Fetch existing permission
+        ServiceResult<Optional<Permission>> existingPermissionResult = permissionService.findByExternalIdentifier(externalIdentifier);
+
+        if (!existingPermissionResult.isSuccess()) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, existingPermissionResult.getApiError());
+        }
+
+        Optional<Permission> existingPermission = existingPermissionResult.getData();
+        if (existingPermission.isEmpty()) {
+            return buildErrorResponse(HttpStatus.NOT_FOUND,
+                    new ApiError("Permission not found with External Identifier: " + externalIdentifier, ApiErrorSeverity.INFO));
         }
 
         // Update and save the permission
-        updatedPermission.setUuid(id);
-        ServiceResult<Permission> saveResult = permissionService.save(updatedPermission);
-
-        if (!saveResult.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(saveResult.getApiError());
-        }
-
-        return ResponseEntity.ok(saveResult.getData());
+        Permission updatedPermission = dtoMapper.convertToPermission(updatedPermissionDTO);
+        updatedPermission.setUuid(existingPermission.get().getUuid());
+        return handleServiceResult(permissionService.save(updatedPermission), HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePermission(@PathVariable UUID id) {
-        ServiceResult<Void> result = permissionService.deleteById(id);
+    @DeleteMapping("/{externalIdentifier}")
+    public ResponseEntity<?> deletePermission(@PathVariable String externalIdentifier) {
+        ServiceResult<Optional<Permission>> existingPermissionResult = permissionService.findByExternalIdentifier(externalIdentifier);
 
-        if (!result.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.getApiError());
+        if (!existingPermissionResult.isSuccess()) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, existingPermissionResult.getApiError());
         }
 
-        return ResponseEntity.noContent().build();
+        Optional<Permission> existingPermission = existingPermissionResult.getData();
+        if (existingPermission.isEmpty()) {
+            return buildErrorResponse(HttpStatus.NOT_FOUND,
+                    new ApiError("Permission not found with External Identifier: " + externalIdentifier, ApiErrorSeverity.INFO));
+        }
+
+        return handleServiceResult(permissionService.deleteById(existingPermission.get().getUuid()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Helper method to handle service results and build appropriate responses.
+     */
+    private <T> ResponseEntity<?> handleServiceResult(ServiceResult<T> result, HttpStatus failureStatus) {
+        return handleServiceResult(result, failureStatus, HttpStatus.OK);
+    }
+
+    private <T> ResponseEntity<?> handleServiceResult(ServiceResult<T> result, HttpStatus failureStatus, HttpStatus successStatus) {
+        return result.isSuccess()
+                ? ResponseEntity.status(successStatus).body(result.getData())
+                : buildErrorResponse(failureStatus, result.getApiError());
+    }
+
+    private ResponseEntity<ApiError> buildErrorResponse(HttpStatus status, ApiError apiError) {
+        return ResponseEntity.status(status).body(apiError);
     }
 }

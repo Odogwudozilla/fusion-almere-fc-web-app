@@ -1,57 +1,43 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Form.css"; // Reusing the generic form styles
+import "../styles/Form.css";
 
 const RoleForm = ({ role, onClose, onSave, notify }) => {
     const [externalIdentifier, setExternalIdentifier] = useState(role ? role.externalIdentifier : "");
     const [name, setName] = useState(role ? role.name : "");
     const [description, setDescription] = useState(role ? role.description : "");
+    const [isSuperUser, setIsSuperUser] = useState(role ? role.isSuperUser : false); // Add isSuperUser state
     const [permissions, setPermissions] = useState([]);
-    const [selectedPermissions, setSelectedPermissions] = useState(role ? role.assignedPermissions.map((perm) => perm.externalIdentifier) : []); // Changed to use externalIdentifier
+    const [selectedPermissions, setSelectedPermissions] = useState(role ? role.assignedPermissions.map((perm) => perm.externalIdentifier) : []);
     const [errorMessages, setErrorMessages] = useState([]);
 
-    // Fetching permissions and updating selectedPermissions if a role is passed
     useEffect(() => {
         fetch("/api/permissions")
             .then((response) => response.json())
-            .then((data) => {
-                setPermissions(data);
-
-                // If a role exists, set the selectedPermissions based on the role's permissions
-                if (role && role.assignedPermissions) {
-                    const permissionIds = role.assignedPermissions.map((perm) => perm.externalIdentifier); // Ensure we're using externalIdentifier
-                    setSelectedPermissions(permissionIds);
-                    console.log("Initial selectedPermissions:", permissionIds); // Debug
-                }
-            })
+            .then((data) => setPermissions(data))
             .catch((error) => console.error("Error fetching permissions:", error));
-    }, [role]);
+    }, []);
 
-    // Handle checkbox state change
     const handleCheckboxChange = (permissionExternalIdentifier) => {
         setSelectedPermissions((prevSelectedPermissions) => {
             const isSelected = prevSelectedPermissions.includes(permissionExternalIdentifier);
-            const updatedSelection = isSelected
-                ? prevSelectedPermissions.filter((extId) => extId !== permissionExternalIdentifier) // Unselect
-                : [...prevSelectedPermissions, permissionExternalIdentifier]; // Select
-            console.log("Updated selectedPermissions:", updatedSelection); // Debug
-            return updatedSelection;
+            return isSelected
+                ? prevSelectedPermissions.filter((extId) => extId !== permissionExternalIdentifier)
+                : [...prevSelectedPermissions, permissionExternalIdentifier];
         });
     };
 
-    // Handle form submission
     const handleSubmit = (event) => {
         event.preventDefault();
         const method = role ? "PUT" : "POST";
         const url = role ? `/api/roles/${role.externalIdentifier}` : "/api/roles";
 
-        // Prepare role object for submission
         const roleData = {
             externalIdentifier,
             name,
             description,
-            assignedPermissions: permissions.filter(perm => selectedPermissions.includes(perm.externalIdentifier)), // Filter by externalIdentifier
+            isSuperUser, // Include isSuperUser in the payload
+            assignedPermissions: permissions.filter(perm => selectedPermissions.includes(perm.externalIdentifier)),
         };
-        console.log("Role Data for submission:", roleData); // Debug
 
         fetch(url, {
             method,
@@ -76,7 +62,6 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
         <form className="form-container" onSubmit={handleSubmit}>
             <h2 className="form-title">{role ? "Edit Role" : "Add Role"}</h2>
 
-            {/* Display error messages */}
             {errorMessages.length > 0 && (
                 <div className="error-messages">
                     {errorMessages.map((msg, index) => (
@@ -117,13 +102,23 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
                 />
             </div>
 
-            {/* Permissions section with checkboxes */}
-            <div className="form-group permissions-group">
-                <label>Permissions</label>
-                <hr class="gradient-hr"/>
-                {/* Superuser-only permissions */}
-                <div className="permissions-group">
-                    <h4 className="permissions-group-title">Superuser Only</h4>
+            <div className="form-group form-group-checkbox">
+                <label htmlFor="isSuperUser">
+                    <span>Is Super User</span>
+                    <input
+                        type="checkbox"
+                        id="isSuperUser"
+                        checked={isSuperUser}
+                        onChange={(e) => setIsSuperUser(e.target.checked)}
+                    />
+                    
+                </label>
+            </div>
+            <hr class="gradient-hr"/>
+
+            {isSuperUser && (
+                <div className="form-group permissions-group">
+                    <label>Superuser Permissions</label>
                     <hr class="custom-hr"/>
                     <div className="permissions-list">
                         {permissions
@@ -135,41 +130,37 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
                                         id={`permission-${permission.externalIdentifier}`}
                                         checked={selectedPermissions.includes(permission.externalIdentifier)}
                                         onChange={() => handleCheckboxChange(permission.externalIdentifier)}
-                                        className="checkbox"
                                     />
-                                    <label htmlFor={`permission-${permission.externalIdentifier}`} className="permission-label">
+                                    <label htmlFor={`permission-${permission.externalIdentifier}`}>
                                         {permission.name}
                                     </label>
                                 </div>
                             ))}
                     </div>
                 </div>
+            )}
 
-                {/* Regular permissions */}
-                <div className="permissions-group">
-                    <h4 className="permissions-group-title">Regular Permissions</h4>
-                    <hr class="custom-hr"></hr>
-                    <div className="permissions-list">
-                        {permissions
-                            .filter((permission) => !permission.isForSuperUserOnly)
-                            .map((permission) => (
-                                <div key={permission.externalIdentifier} className="permission-item">
-                                    <input
-                                        type="checkbox"
-                                        id={`permission-${permission.externalIdentifier}`}
-                                        checked={selectedPermissions.includes(permission.externalIdentifier)}
-                                        onChange={() => handleCheckboxChange(permission.externalIdentifier)}
-                                        className="checkbox"
-                                    />
-                                    <label htmlFor={`permission-${permission.externalIdentifier}`} className="permission-label">
-                                        {permission.name}
-                                    </label>
-                                </div>
-                            ))}
-                    </div>
+            <div className="form-group permissions-group">
+                <label>Regular Permissions</label>
+                <hr class="custom-hr"/>
+                <div className="permissions-list">
+                    {permissions
+                        .filter((permission) => !permission.isForSuperUserOnly)
+                        .map((permission) => (
+                            <div key={permission.externalIdentifier} className="permission-item">
+                                <input
+                                    type="checkbox"
+                                    id={`permission-${permission.externalIdentifier}`}
+                                    checked={selectedPermissions.includes(permission.externalIdentifier)}
+                                    onChange={() => handleCheckboxChange(permission.externalIdentifier)}
+                                />
+                                <label htmlFor={`permission-${permission.externalIdentifier}`}>
+                                    {permission.name}
+                                </label>
+                            </div>
+                        ))}
                 </div>
             </div>
-
 
             <div className="form-actions">
                 <button type="submit" className="btn btn-primary">

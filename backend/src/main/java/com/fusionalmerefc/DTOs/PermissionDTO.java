@@ -7,10 +7,6 @@ public class PermissionDTO {
     private String description;
     private boolean isForSuperUserOnly;
 
-    public void setIsForSuperUserOnly(boolean isForSuperUserOnly) {
-        this.isForSuperUserOnly = isForSuperUserOnly;
-    }
-
     public PermissionDTO(String externalIdentifier, String name, String description, boolean isForSuperUserOnly) {
         this.externalIdentifier = externalIdentifier;
         this.name = name;
@@ -42,11 +38,12 @@ public class PermissionDTO {
         this.description = description;
     }
 
-    public boolean isIsForSuperUserOnly() {
-        return this.isForSuperUserOnly;
-    }
-
     public boolean getIsForSuperUserOnly() {
         return this.isForSuperUserOnly;
     }
+
+    public void setIsForSuperUserOnly(boolean isForSuperUserOnly) {
+        this.isForSuperUserOnly = isForSuperUserOnly;
+    }
+
 }

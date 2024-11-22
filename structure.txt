@@ -1,4 +1,4 @@
-fusion-almere-fc
+.
 |-- backend
 |   |-- HELP.md
 |   |-- build.gradle.kts
@@ -12,6 +12,9 @@ fusion-almere-fc
 |   |   |-- fusion-almere-fc.2024-11-15.log
 |   |   |-- fusion-almere-fc.2024-11-16.log
 |   |   |-- fusion-almere-fc.2024-11-18.log
+|   |   |-- fusion-almere-fc.2024-11-19.log
+|   |   |-- fusion-almere-fc.2024-11-20.log
+|   |   |-- fusion-almere-fc.2024-11-21.log
 |   |   `-- fusion-almere-fc.log
 |   |-- settings.gradle.kts
 |   `-- src
@@ -19,6 +22,10 @@ fusion-almere-fc
 |       |   |-- java
 |       |   |   `-- com
 |       |   |       `-- fusionalmerefc
+|       |   |           |-- DTOs
+|       |   |           |   |-- DTOMapper.java
+|       |   |           |   |-- PermissionDTO.java
+|       |   |           |   `-- RoleDTO.java
 |       |   |           |-- FusionAlmereFcApplication.java
 |       |   |           |-- config
 |       |   |           |   |-- ApiError.java
@@ -47,11 +54,13 @@ fusion-almere-fc
 |       |   |           `-- service
 |       |   |               |-- BaseService.java
 |       |   |               |-- PermissionService.java
+|       |   |               |-- RolePermissionService.java
 |       |   |               |-- RoleService.java
 |       |   |               |-- UserService.java
 |       |   |               `-- impl
 |       |   |                   |-- BaseServiceImpl.java
 |       |   |                   |-- PermissionServiceImpl.java
+|       |   |                   |-- RolePermissionServiceImpl.java
 |       |   |                   |-- RoleServiceImpl.java
 |       |   |                   `-- UserServiceImpl.java
 |       |   `-- resources
@@ -81,6 +90,8 @@ fusion-almere-fc
 |           |           |   |-- UserRepositoryTest.java
 |           |           |   `-- UserRoleRepositoryTest.java
 |           |           `-- service
+|           |               `-- impl
+|           |                   `-- RoleServiceImplTest.java
 |           `-- resources
 |               |-- application-test.properties
 |               `-- application.properties
@@ -128,7 +139,10 @@ fusion-almere-fc
 |   |-- fusion-almere-fc.2024-11-16.log
 |   |-- fusion-almere-fc.2024-11-17.log
 |   |-- fusion-almere-fc.2024-11-18.log
+|   |-- fusion-almere-fc.2024-11-19.log
+|   |-- fusion-almere-fc.2024-11-20.log
+|   |-- fusion-almere-fc.2024-11-21.log
 |   `-- fusion-almere-fc.log
 `-- structure.txt
 
-36 directories, 95 files
+38 directories, 107 files
