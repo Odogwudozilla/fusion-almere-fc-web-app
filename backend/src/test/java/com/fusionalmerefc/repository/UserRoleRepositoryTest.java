@@ -1,7 +1,7 @@
 package com.fusionalmerefc.repository;
 
 import com.fusionalmerefc.model.UserRole;
-import com.fusionalmerefc.model.constants.Status;
+import com.fusionalmerefc.model.constants.StatusType;
 import com.fusionalmerefc.model.User;
 import com.fusionalmerefc.model.Role;
 
@@ -40,7 +40,7 @@ public class UserRoleRepositoryTest {
         user.setEmail(faker.internet().emailAddress());
         user.setPassword(faker.internet().password());
         user.setWhatsappNumber(faker.phoneNumber().cellPhone());
-        user.setStatus(Status.ACTIVE);
+        user.setStatus(StatusType.ACTIVE);
         userRepository.save(user);
 
         Role role = new Role();

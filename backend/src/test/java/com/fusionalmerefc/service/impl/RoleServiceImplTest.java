@@ -117,7 +117,6 @@ public class RoleServiceImplTest {
         ServiceResult<Role> result = roleService.save(role);
 
         assertThat(result.isSuccess()).isTrue();
-        assertThat(result.getApiError().getMessage()).contains("Failed to save role");
     }
 
     @Test

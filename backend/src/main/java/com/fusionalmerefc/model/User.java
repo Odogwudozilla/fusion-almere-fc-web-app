@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import com.fusionalmerefc.model.constants.MembershipType;
-import com.fusionalmerefc.model.constants.Status;
+import com.fusionalmerefc.model.constants.StatusType;
 
 @Entity
 @Table(name = "users")
@@ -39,7 +39,7 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private StatusType status;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

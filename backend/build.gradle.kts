@@ -24,23 +24,35 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.projectlombok:lombok:1.18.36")
+    // Spring Boot starters
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-validation") // Validation starter
+
+    // Lombok
+    implementation("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
+
+    // Database
+    runtimeOnly("org.postgresql:postgresql")
+    implementation("com.h2database:h2:2.1.214") // Downgraded H2 for stability
+
+    // Validation dependencies (if validation starter is insufficient)
+    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+    implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
+    implementation("org.glassfish:jakarta.el:4.0.2")
+
+    // Test dependencies
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("org.postgresql:postgresql")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
-	implementation("net.datafaker:datafaker:2.4.1")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	// Other dependencies
-	implementation("com.h2database:h2:2.3.232")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
+
+    // Other libraries
+    implementation("net.datafaker:datafaker:2.4.1")
 }
+
 
 tasks.withType<Test> {
 	useJUnitPlatform()

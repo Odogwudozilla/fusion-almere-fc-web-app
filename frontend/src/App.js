@@ -4,8 +4,9 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import LoginRegister from './pages/LoginRegister'; // Login & Register combined page
 import ContactUs from './pages/ContactUs'; // Contact Us page
-import RoleManagement from './components/role/RoleManagement';
-import PermissionManagement from "./components/permission/PermissionManagement";
+import RoleManagement from './components/screens/role/RoleManagement';
+import PermissionManagement from "./components/screens/permission/PermissionManagement";
+import UserManagement from "./components/screens/user/UserManagement";
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
                   <Route path="/contact-us" element={<ContactUs />} />
                   <Route path="/admin/roles" element={<RoleManagement />} />
                   <Route path="/admin/permissions" element={<PermissionManagement />} />
+                  <Route path="/admin/users" element={<UserManagement />} />
               </Routes>
           </Layout>
       </Router>

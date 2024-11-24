@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import PermissionList from "./PermissionList";
-import PermissionForm from "./PermissionForm";
-import Notification from "../Notification";
+import UserList from "./UserList";
+import UserForm from "./UserForm";
+import Notification from "../../Notification";
 
-function PermissionManagement() {
+const UserManagement = () => {
     const [showForm, setShowForm] = useState(false);
-    const [selectedPermission, setSelectedPermission] = useState(null);
-    const [refreshKey, setRefreshKey] = useState(0); // Key for refreshing the list when adding or editing a permission
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [refreshKey, setRefreshKey] = useState(0);
     const [notification, setNotification] = useState({ message: "", type: "" });
 
     const handleNotification = (message, type) => {
@@ -15,12 +15,12 @@ function PermissionManagement() {
     };
 
     const handleAddClick = () => {
-        setSelectedPermission(null);
+        setSelectedUser(null);
         setShowForm(true);
     };
 
-    const handleEditClick = (permission) => {
-        setSelectedPermission(permission);
+    const handleEditClick = (user) => {
+        setSelectedUser(user);
         setShowForm(true);
     };
 
@@ -30,8 +30,8 @@ function PermissionManagement() {
 
     const handleSave = () => {
         setShowForm(false);
-        setRefreshKey((prevKey) => prevKey + 1); // Refresh the list after saving
-        handleNotification("Permission saved successfully!", "success");
+        setRefreshKey((prevKey) => prevKey + 1);
+        handleNotification("User saved successfully!", "success");
     };
 
     return (
@@ -42,20 +42,20 @@ function PermissionManagement() {
                 onClose={() => setNotification({ message: "", type: "" })}
             />
             <div className="management-screen-form-container">
-            {showForm && (
-                <PermissionForm
-                    permission={selectedPermission}
-                    onClose={handleCloseForm}
-                    onSave={handleSave}
-                    notify={handleNotification}
-                />
-            )}
+                {showForm && (
+                    <UserForm
+                        user={selectedUser}
+                        onClose={handleCloseForm}
+                        onSave={handleSave}
+                        notify={handleNotification}
+                    />
+                )}
             </div>
             <div className="management-screen-list-container">
                 <button onClick={handleAddClick} className="btn btn-primary">
-                    Add Permission
+                    Add User
                 </button>
-                <PermissionList
+                <UserList
                     key={refreshKey}
                     onEditClick={handleEditClick}
                     notify={handleNotification}
@@ -63,6 +63,6 @@ function PermissionManagement() {
             </div>
         </div>
     );
-}
+};
 
-export default PermissionManagement;
+export default UserManagement;

@@ -1,7 +1,8 @@
 package com.fusionalmerefc.repository;
 
 import com.fusionalmerefc.model.User;
-import com.fusionalmerefc.model.constants.Status;
+import com.fusionalmerefc.model.constants.MembershipType;
+import com.fusionalmerefc.model.constants.StatusType;
 
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ public class UserRepositoryTest {
         user.setEmail(faker.internet().emailAddress());
         user.setPassword(faker.internet().password());
         user.setWhatsappNumber(faker.phoneNumber().cellPhoneInternational());
-        user.setStatus(Status.ACTIVE);
+        user.setStatus(StatusType.ACTIVE);
         log.info("The created user is {}",  user.toString());
 
         User savedUser = userRepository.save(user);
@@ -52,7 +53,8 @@ public class UserRepositoryTest {
         user.setEmail(faker.internet().emailAddress());
         user.setPassword(faker.internet().password());
         user.setWhatsappNumber(faker.phoneNumber().cellPhone());
-        user.setStatus(Status.ACTIVE);
+        user.setStatus(StatusType.ACTIVE);
+        user.setMembershipType(MembershipType.ACTIVE);
 
         userRepository.save(user);
 

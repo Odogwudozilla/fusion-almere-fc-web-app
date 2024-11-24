@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircle, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import "../styles/List.css";
+import "../../styles/List.css";
 
 const PermissionList = ({ onEditClick, notify}) => {
     const [permissions, setPermissions] = useState([]);

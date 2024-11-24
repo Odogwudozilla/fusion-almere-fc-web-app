@@ -1,5 +1,6 @@
 package com.fusionalmerefc.DTOs;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,7 +10,11 @@ import org.springframework.stereotype.Component;
 import com.fusionalmerefc.model.Permission;
 import com.fusionalmerefc.model.Role;
 import com.fusionalmerefc.model.RolePermission;
+import com.fusionalmerefc.model.User;
+import com.fusionalmerefc.model.constants.MembershipType;
+import com.fusionalmerefc.model.constants.StatusType;
 import com.fusionalmerefc.service.impl.RoleServiceImpl;
+
 @Component
 public class DTOMapper {
 
@@ -69,6 +74,62 @@ public class DTOMapper {
                 .collect(Collectors.toList());
     }
 
+    // --- User Conversion Methods ---
+
+    /**
+     * Converts a UserDTO to a User entity.
+     * @param userDTO The UserDTO to convert.
+     * @return The corresponding User entity.
+     */
+    public User convertToUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            return null;
+        }
+
+        User user = new User();
+        user.setExternalIdentifier(userDTO.getExternalIdentifier());
+        user.setName(userDTO.getName());
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setMobileNumber(userDTO.getMobileNumber());
+        user.setWhatsappNumber(userDTO.getWhatsappNumber());
+        user.setPostcode(userDTO.getPostcode());
+        user.setAddress(userDTO.getAddress());
+        user.setProfilePictureUrl(userDTO.getProfilePictureUrl());
+        user.setMembershipType(matchToEnum(userDTO.getMembershipType(), MembershipType.class));
+        user.setActivatedAt(LocalDateTime.now());
+        user.setStatus(matchToEnum(userDTO.getStatus(), StatusType.class));
+
+        return user;
+    }
+
+    /**
+     * Helper method to convert a list of RoleDTOs to Role entities.
+     * @param roleDTOs The list of RoleDTOs.
+     * @return A list of Role entities.
+     */
+    private List<Role> convertToRoles(List<RoleDTO> roleDTOs) {
+        if (roleDTOs == null) {
+            return Collections.emptyList();
+        }
+        return roleDTOs.stream()
+                .map(this::convertToRole)  // Converts each RoleDTO to Role
+                .collect(Collectors.toList());
+    }
+
+    // --- Permission Conversion Methods ---
+
+    public Permission convertToPermission(PermissionDTO incomingPermissionDTO) {
+        Permission permission = new Permission();
+
+        permission.setExternalIdentifier(incomingPermissionDTO.getExternalIdentifier());
+        permission.setName(incomingPermissionDTO.getName());
+        permission.setDescription(incomingPermissionDTO.getDescription());
+        permission.setForSuperUserOnly(incomingPermissionDTO.getIsForSuperUserOnly());
+
+        return permission;
+    }
+
     // --- Private helper methods ---
 
     /**
@@ -108,15 +169,13 @@ public class DTOMapper {
         return rolePermission;
     }
 
-    public Permission convertToPermission(PermissionDTO incomingPermissionDTO) {
-        Permission permission = new Permission();
-
-        permission.setExternalIdentifier(incomingPermissionDTO.getExternalIdentifier());
-        permission.setName(incomingPermissionDTO.getName());
-        permission.setDescription(incomingPermissionDTO.getDescription());
-        permission.setForSuperUserOnly(incomingPermissionDTO.getIsForSuperUserOnly());
-
-        return permission;
+    public <T extends Enum<T>> T matchToEnum(String value, Class<T> enumType) {
+        for (T constant : enumType.getEnumConstants()) {
+            if (constant.name().equalsIgnoreCase(value)) {
+                return constant;
+            }
+        }
+        throw new IllegalArgumentException("Invalid value for enum " + enumType.getSimpleName() + ": " + value);
     }
+    
 }
-

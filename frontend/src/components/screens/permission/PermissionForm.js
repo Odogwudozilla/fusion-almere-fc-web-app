@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Form.css"; // Reusing the generic form styles
+import "../../styles/Form.css"; // Reusing the generic form styles
 
 const PermissionForm = ({ permission, onClose, onSave, notify }) => {
     const [externalIdentifier, setExternalIdentifier] = useState(permission ? permission.externalIdentifier : "");

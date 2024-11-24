@@ -1,6 +1,6 @@
 package com.fusionalmerefc.model.constants;
 
-public enum Status {
+public enum StatusType {
     ACTIVE,
     INACTIVE,
     DELETED

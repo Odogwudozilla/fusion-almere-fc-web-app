@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RoleList from "./RoleList";
 import RoleForm from "./RoleForm";
-import Notification from "../Notification";
+import Notification from "../../Notification";
 
 const RoleManagement = () => {
     const [showForm, setShowForm] = useState(false);

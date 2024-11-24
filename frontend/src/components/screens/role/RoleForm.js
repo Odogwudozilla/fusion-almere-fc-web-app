@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Form.css";
+import "../../styles/Form.css";
 
 const RoleForm = ({ role, onClose, onSave, notify }) => {
     const [externalIdentifier, setExternalIdentifier] = useState(role ? role.externalIdentifier : "");

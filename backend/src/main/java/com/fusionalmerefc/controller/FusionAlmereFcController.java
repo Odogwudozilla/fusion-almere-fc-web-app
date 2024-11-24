@@ -17,12 +17,17 @@ public class FusionAlmereFcController {
 
     @GetMapping("/admin/roles")
     public String getRolesPage() {
-        return "forward:/index.html";  // This forwards to the React app's entry point
+        return "forward:/index.html"; 
     }
 
     @GetMapping("/admin/permissions")
     public String getPemissionsPage() {
-        return "forward:/index.html";  // This forwards to the React app's entry point
+        return "forward:/index.html"; 
+    }
+
+    @GetMapping("/admin/users")
+    public String getUsersPage() {
+        return "forward:/index.html"; 
     }
     
     @GetMapping("/{path:[^\\.]*}")

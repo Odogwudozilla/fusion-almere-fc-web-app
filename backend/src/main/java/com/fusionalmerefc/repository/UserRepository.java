@@ -1,9 +1,7 @@
 package com.fusionalmerefc.repository;
 
 import com.fusionalmerefc.model.User;
-import com.fusionalmerefc.model.constants.Status;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -11,6 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends BaseRepository<User, UUID> {
     User findByUsername(String username);
-    
-    List<User> findByStatus(Status status);
 }
