@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
+
 
 public class UserDTO {
     @NotBlank(message = "External identifier cannot be blank.")
@@ -42,6 +44,8 @@ public class UserDTO {
 
     @NotBlank(message = "Status cannot be blank.")
     private String status;
+
+    private List<RoleDTO> assignedRoles;
 
     // Getters and Setters
     public String getExternalIdentifier() {
@@ -138,5 +142,13 @@ public class UserDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+   
+    public List<RoleDTO> getAssignedRoles() {
+        return this.assignedRoles;
+    }
+
+    public void setAssignedRoles(List<RoleDTO> assignedRoles) {
+        this.assignedRoles = assignedRoles;
     }
 }

@@ -1,28 +1,44 @@
 package com.fusionalmerefc.service.impl;
 
 import com.fusionalmerefc.DTOs.DTOMapper;
+import com.fusionalmerefc.DTOs.PermissionDTO;
+import com.fusionalmerefc.DTOs.RoleDTO;
+import com.fusionalmerefc.DTOs.UserDTO;
 import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
+import com.fusionalmerefc.model.Permission;
+import com.fusionalmerefc.model.Role;
+import com.fusionalmerefc.model.RolePermission;
 import com.fusionalmerefc.model.User;
+import com.fusionalmerefc.model.UserRole;
 import com.fusionalmerefc.model.constants.StatusType;
+import com.fusionalmerefc.repository.RoleRepository;
 import com.fusionalmerefc.repository.UserRepository;
+import com.fusionalmerefc.repository.UserRoleRepository;
 import com.fusionalmerefc.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl extends BaseServiceImpl<User, UUID> implements UserService {
 
     private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
+    private final UserRoleRepository userRoleRepository;
+    private final RoleRepository roleRepository;
+    
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository) {
         super(userRepository); 
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -61,4 +77,83 @@ public class UserServiceImpl extends BaseServiceImpl<User, UUID> implements User
     }
  
 
+    public ServiceResult<List<UserDTO>> mapToUserToUserDTO(ServiceResult<List<User>> resultUsers) {
+        ServiceResult<List<UserDTO>> resultDTO = new ServiceResult<>();
+
+        List<User> roles = resultUsers.getData();
+
+        resultDTO.setData(roles.stream().map(this::mapUserToUserDTO).collect(Collectors.toList()));
+        resultDTO.setSuccess(resultUsers.isSuccess());
+        resultDTO.setApiError(resultUsers.getApiError());
+    
+        return resultDTO;
+    }
+
+    public UserDTO mapUserToUserDTO(User user) {
+        List<UserRole> userRoles = userRoleRepository.findByUserUuid(user.getUuid());
+
+        List<RoleDTO> assignedRoles = userRoles.stream().map(userRole -> {
+            Role role = userRole.getRole();
+
+            return new DTOMapper().convertToRoleDTO(role);
+            
+        }).collect(Collectors.toList());
+
+        // Construct the UserDTO
+        UserDTO userDTO = new DTOMapper().mapToUserDTO(user);
+        userDTO.setAssignedRoles(assignedRoles);
+        return userDTO;
+
+    }
+
+    @Override
+    public List<Role> findRolesByExternalIdentifier(List<RoleDTO> roleDTOs) {
+        List<Role> roles = new ArrayList<>();
+
+        for (RoleDTO roleDTO : roleDTOs) {
+            Optional<Role> optionalRole = roleRepository.findByExternalIdentifier(roleDTO.getExternalIdentifier());
+            if (optionalRole.isPresent()) {
+                roles.add(optionalRole.get());
+            }
+        }
+
+        return roles;
+    }
+
+    @Override
+    public void saveOrUpdateUserRoles(List<UserRole> toBeSavedUserRoles) {
+        if (toBeSavedUserRoles.isEmpty()) {
+            return; // Nothing to save or update
+        }
+    
+        // Retrieve existing user roles for the given role
+        UUID userUuid = toBeSavedUserRoles.get(0).getUser().getUuid();
+        List<UserRole> existingUserRoles = userRoleRepository.findByUserUuid(userUuid);
+    
+        // Convert lists to sets for more efficient operations
+        Set<UserRole> toBeSavedSet = new HashSet<>(toBeSavedUserRoles);
+        Set<UserRole> existingSet = new HashSet<>(existingUserRoles);
+    
+        // Determine roles to delete
+        Set<UserRole> toDelete = new HashSet<>(existingSet);
+        toDelete.removeAll(toBeSavedSet); // Entries in existing but not in toBeSaved
+    
+        // Determine roles to save
+        Set<UserRole> toSave = new HashSet<>(toBeSavedSet);
+        toSave.removeAll(existingSet); // Entries in toBeSaved but not in existing
+    
+        // Perform delete and save operations
+        if (!toDelete.isEmpty()) {
+            userRoleRepository.deleteAll(toDelete);
+        }
+        if (!toSave.isEmpty()) {
+            userRoleRepository.saveAll(toSave);
+        }
+    }
+
+    // Generate external identifier for RolePermission
+    public static String generateExternalIdentifier(User user, Role role) {
+        // This method could be customized to generate a unique identifier for each RolePermission
+        return user.getExternalIdentifier() + ":" + role.getExternalIdentifier();
+    }
 }

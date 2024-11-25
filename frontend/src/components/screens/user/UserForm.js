@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/Form.css";
+import RequiredInput from "../../RequiredInput";
 
 const UserForm = ({ user, onClose, onSave, notify }) => {
     const [externalIdentifier, setExternalIdentifier] = useState(user ? user.externalIdentifier : "");
@@ -84,7 +85,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="externalIdentifier">Code</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="externalIdentifier"
                     value={externalIdentifier}
@@ -95,7 +96,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="name">Name</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="name"
                     value={name}
@@ -106,7 +107,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="username">Username</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="username"
                     value={username}
@@ -117,7 +118,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="email">Email</label>
-                <input
+                <RequiredInput
                     type="email"
                     id="email"
                     value={email}
@@ -128,7 +129,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="mobileNumber">Mobile Number</label>
-                <input
+                <RequiredInput
                     type="tel"
                     id="mobileNumber"
                     value={mobileNumber}
@@ -138,7 +139,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="whatsappNumber">WhatsApp Number</label>
-                <input
+                <RequiredInput
                     type="tel"
                     id="whatsappNumber"
                     value={whatsappNumber}
@@ -148,7 +149,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="postcode">Postcode</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="postcode"
                     value={postcode}
@@ -158,7 +159,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="address">Address</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="address"
                     value={address}
@@ -168,7 +169,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="membershipType">Membership Type</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="membershipType"
                     value={membershipType}
@@ -179,7 +180,7 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="status">Status</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="status"
                     value={status}
@@ -190,10 +191,11 @@ const UserForm = ({ user, onClose, onSave, notify }) => {
 
             <div className="form-group roles-group">
                 <label>Assigned Roles</label>
+                <hr class="custom-hr"/>
                 <div className="roles-list">
                     {roles.map((role) => (
                         <div key={role.externalIdentifier} className="role-item">
-                            <input
+                            <RequiredInput
                                 type="checkbox"
                                 id={`role-${role.externalIdentifier}`}
                                 checked={selectedRoles.includes(role.externalIdentifier)}

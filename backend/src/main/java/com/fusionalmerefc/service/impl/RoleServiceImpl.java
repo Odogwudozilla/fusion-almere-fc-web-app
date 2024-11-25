@@ -117,6 +117,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, UUID> implements Role
         return role.getExternalIdentifier() + ":" + permission.getExternalIdentifier();
     }
 
+    @Override
     public ServiceResult<List<RoleDTO>> convertRolesToRoleDTOs(ServiceResult<List<Role>> serviceResultRoles) {
         ServiceResult<List<RoleDTO>> resultDTO = new ServiceResult<>();
 
@@ -158,6 +159,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, UUID> implements Role
         return roleDTO;
     } 
 
+    @Override
     public List<Permission> findPermissionsByExternalIdentifier(List<PermissionDTO> permissionDTOs) {
         List<Permission> permissions = new ArrayList<>();
 
@@ -171,6 +173,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, UUID> implements Role
         return permissions;
     }
     
+    @Override
     public void saveOrUpdateRolePermissions(List<RolePermission> toBeSavedRolePermissions) {
         if (toBeSavedRolePermissions.isEmpty()) {
             return; // Nothing to save or update

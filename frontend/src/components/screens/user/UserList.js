@@ -54,6 +54,7 @@ const UserList = ({ onEditClick, notify }) => {
                         {showAddressDetails && <th>Address</th>} {/* Conditionally show Address */}
                         <th>Membership Type</th>
                         <th>Status</th>
+                        <th>Assigned roles</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

@@ -1,0 +1,17 @@
+.required-input-wrapper {
+    display: flex;
+    flex-direction: column; /* Ensures label and input stack vertically */
+    margin-bottom: 1rem; /* Add spacing between form groups */
+}
+
+.required-input {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* Adds spacing between the input and the asterisk */
+}
+
+.required-asterisk {
+    color: red; /* Highlight the asterisk */
+    font-size: 1.2em; /* Adjust size */
+    margin-left: 5px; /* Add spacing from input */
+}

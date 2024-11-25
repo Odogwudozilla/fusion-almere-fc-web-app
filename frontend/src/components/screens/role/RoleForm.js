@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/Form.css";
+import RequiredInput from "../../RequiredInput";
 
 const RoleForm = ({ role, onClose, onSave, notify }) => {
     const [externalIdentifier, setExternalIdentifier] = useState(role ? role.externalIdentifier : "");
@@ -72,7 +73,7 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="externalIdentifier">Code</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="externalIdentifier"
                     value={externalIdentifier}
@@ -83,7 +84,7 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="name">Name</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="name"
                     value={name}
@@ -94,7 +95,7 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
 
             <div className="form-group">
                 <label htmlFor="description">Description</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="description"
                     value={description}
@@ -105,7 +106,7 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
             <div className="form-group form-group-checkbox">
                 <label htmlFor="isSuperUser">
                     <span>Is Super User</span>
-                    <input
+                    <RequiredInput
                         type="checkbox"
                         id="isSuperUser"
                         checked={isSuperUser}
@@ -125,7 +126,7 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
                             .filter((permission) => permission.isForSuperUserOnly)
                             .map((permission) => (
                                 <div key={permission.externalIdentifier} className="permission-item">
-                                    <input
+                                    <RequiredInput
                                         type="checkbox"
                                         id={`permission-${permission.externalIdentifier}`}
                                         checked={selectedPermissions.includes(permission.externalIdentifier)}
@@ -148,7 +149,7 @@ const RoleForm = ({ role, onClose, onSave, notify }) => {
                         .filter((permission) => !permission.isForSuperUserOnly)
                         .map((permission) => (
                             <div key={permission.externalIdentifier} className="permission-item">
-                                <input
+                                <RequiredInput
                                     type="checkbox"
                                     id={`permission-${permission.externalIdentifier}`}
                                     checked={selectedPermissions.includes(permission.externalIdentifier)}

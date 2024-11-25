@@ -4,16 +4,17 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Component;
 
 import com.fusionalmerefc.model.Permission;
 import com.fusionalmerefc.model.Role;
 import com.fusionalmerefc.model.RolePermission;
 import com.fusionalmerefc.model.User;
+import com.fusionalmerefc.model.UserRole;
 import com.fusionalmerefc.model.constants.MembershipType;
 import com.fusionalmerefc.model.constants.StatusType;
 import com.fusionalmerefc.service.impl.RoleServiceImpl;
+import com.fusionalmerefc.service.impl.UserServiceImpl;
 
 @Component
 public class DTOMapper {
@@ -74,6 +75,22 @@ public class DTOMapper {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Converts a UserDTO and a list of Roles into UserRole entities.
+     * @param user The User entity associated with the permissions.
+     * @param roleDTO The UserDTO containing the roles.
+     * @param roles The list of Role entities.
+     * @return A list of UserRoles entities.
+     */
+    public List<UserRole> convertFromUserDTO(User user, UserDTO userDTO, List<Role> roles) {
+        if (user == null || userDTO == null || roles == null) {
+            return Collections.emptyList();
+        }
+        return roles.stream()
+                .map(role -> createUserRole(user, role))
+                .collect(Collectors.toList());
+    }
+
     // --- User Conversion Methods ---
 
     /**
@@ -81,7 +98,7 @@ public class DTOMapper {
      * @param userDTO The UserDTO to convert.
      * @return The corresponding User entity.
      */
-    public User convertToUser(UserDTO userDTO) {
+    public User mapToUser(UserDTO userDTO) {
         if (userDTO == null) {
             return null;
         }
@@ -101,6 +118,33 @@ public class DTOMapper {
         user.setStatus(matchToEnum(userDTO.getStatus(), StatusType.class));
 
         return user;
+    }
+
+    /**
+     * Converts a UserDTO to a User entity.
+     * @param user The User to convert.
+     * @return The corresponding UserDTO entity.
+     */
+    public UserDTO mapToUserDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setExternalIdentifier(user.getExternalIdentifier());
+        userDTO.setName(user.getName());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setMobileNumber(user.getMobileNumber());
+        userDTO.setWhatsappNumber(user.getWhatsappNumber());
+        userDTO.setPostcode(user.getPostcode());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setProfilePictureUrl(user.getProfilePictureUrl());
+        userDTO.setMembershipType(user.getMembershipType().toString());
+        userDTO.setActivatedAt(LocalDateTime.now());
+        userDTO.setStatus(user.getStatus().toString());
+
+        return userDTO;
     }
 
     /**
@@ -169,6 +213,20 @@ public class DTOMapper {
         return rolePermission;
     }
 
+    /**
+     * Creates a UserRole entity.
+     * @param user The User entity.
+     * @param role The Role entity.
+     * @return A UserRole entity.
+     */
+    private UserRole createUserRole(User user, Role role) {
+        UserRole userrole = new UserRole();
+        userrole.setUser(user);
+        userrole.setRole(role);
+        userrole.setExternalIdentifier(UserServiceImpl.generateExternalIdentifier(user, role));
+        return userrole;
+    }
+
     public <T extends Enum<T>> T matchToEnum(String value, Class<T> enumType) {
         for (T constant : enumType.getEnumConstants()) {
             if (constant.name().equalsIgnoreCase(value)) {
@@ -177,5 +235,6 @@ public class DTOMapper {
         }
         throw new IllegalArgumentException("Invalid value for enum " + enumType.getSimpleName() + ": " + value);
     }
+
     
 }

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "../../styles/Form.css"; // Reusing the generic form styles
+import "../../styles/Form.css"; 
+import RequiredInput from "../../RequiredInput";
 
 const PermissionForm = ({ permission, onClose, onSave, notify }) => {
     const [externalIdentifier, setExternalIdentifier] = useState(permission ? permission.externalIdentifier : "");
@@ -33,7 +34,7 @@ const PermissionForm = ({ permission, onClose, onSave, notify }) => {
             <h2 className="form-title">{permission ? "Edit Permission" : "Add Permission"}</h2>
             <div className="form-group">
                 <label htmlFor="externalIdentifier">Code</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="externalIdentifier"
                     value={externalIdentifier}
@@ -43,7 +44,7 @@ const PermissionForm = ({ permission, onClose, onSave, notify }) => {
             </div>
             <div className="form-group">
                 <label htmlFor="name">Name</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="name"
                     value={name}
@@ -53,7 +54,7 @@ const PermissionForm = ({ permission, onClose, onSave, notify }) => {
             </div>
             <div className="form-group">
                 <label htmlFor="description">Description</label>
-                <input
+                <RequiredInput
                     type="text"
                     id="description"
                     value={description}
@@ -63,7 +64,7 @@ const PermissionForm = ({ permission, onClose, onSave, notify }) => {
             <div className="form-group form-group-checkbox">
                 <label htmlFor="isForSuperUserOnly">
                     <span>Superuser Only</span>
-                    <input
+                    <RequiredInput
                         type="checkbox"
                         id="isForSuperUserOnly"
                         checked={isForSuperUserOnly}

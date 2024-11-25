@@ -26,7 +26,7 @@ public class RolePermissionServiceImpl extends BaseServiceImpl<RolePermission, U
             try {
                 List<RolePermission> existingRolePermissions = rolePermissionRepository.findByRoleUuid(roleUuid);
                 rolePermissionRepository.deleteAll(existingRolePermissions);
-                result.setSuccess(true);  // Assuming the method exists in your repository
+                result.setSuccess(true);  
             
             } catch (Exception e) {
                 result.setSuccess(false);

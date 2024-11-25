@@ -5,13 +5,17 @@ import com.fusionalmerefc.DTOs.UserDTO;
 import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
+import com.fusionalmerefc.model.Role;
+import com.fusionalmerefc.model.RolePermission;
 import com.fusionalmerefc.model.User;
+import com.fusionalmerefc.model.UserRole;
+import com.fusionalmerefc.repository.UserRepository;
+import com.fusionalmerefc.service.UserRoleService;
 import com.fusionalmerefc.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,22 +25,29 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
+    private final UserRoleService userRoleService;
     private final DTOMapper dtoMapper;
 
-    public UserController(UserService userService, DTOMapper dtoMapper) {
+    public UserController(UserService userService, UserRoleService userRoleService, DTOMapper dtoMapper) {
         this.userService = userService;
+        this.userRoleService = userRoleService;
         this.dtoMapper = dtoMapper;
     }
 
     @PostMapping("/bulk-add")
     public ResponseEntity<?> bulkAddUsers(@RequestBody List<UserDTO> usersDTO) {
-        List<User> users = usersDTO.stream().map(this.dtoMapper::convertToUser).collect(Collectors.toList());
+        List<User> users = usersDTO.stream().map(this.dtoMapper::mapToUser).collect(Collectors.toList());
         return handleServiceResult(userService.saveAll(users), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping
     public ResponseEntity<?> getAllUsers() {
-        return handleServiceResult(userService.findAll(), HttpStatus.INTERNAL_SERVER_ERROR);
+        ServiceResult<List<User>> result = userService.findAll();
+        if (!result.isSuccess()) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, result.getApiError());
+        }
+        ServiceResult<List<UserDTO>> dtoResult = userService.mapToUserToUserDTO(result);
+        return ResponseEntity.ok(dtoResult.getData());
     }
 
     @GetMapping("/{externalIdentifier}")
@@ -56,14 +67,25 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
-        if (userDTO.getExternalIdentifier() == null) {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO incomingUserDTO) {
+        if (incomingUserDTO.getExternalIdentifier() == null) {
             return buildErrorResponse(HttpStatus.BAD_REQUEST,
                     new ApiError("User externalIdentifier must not be empty", ApiErrorSeverity.INFO));
         }
 
-        User user = dtoMapper.convertToUser(userDTO);
-        return handleServiceResult(userService.save(user), HttpStatus.BAD_REQUEST, HttpStatus.CREATED);
+        User user = dtoMapper.mapToUser(incomingUserDTO);
+        List<Role> assignedRoles = userService.findRolesByExternalIdentifier(incomingUserDTO.getAssignedRoles());
+        List<UserRole> toBeSavedUserRoles = dtoMapper.convertFromUserDTO(user, incomingUserDTO, assignedRoles);
+
+        ServiceResult<User> result = userService.save(user);
+        userService.saveOrUpdateUserRoles(toBeSavedUserRoles);
+
+        if (!result.isSuccess()) {
+            return buildErrorResponse(HttpStatus.BAD_REQUEST, result.getApiError());
+        }
+
+        UserDTO savedUser = dtoMapper.mapToUserDTO(result.getData());
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PutMapping("/{externalIdentifier}")
@@ -90,9 +112,20 @@ public class UserController {
         }
 
         // Update and save the user
-        User updatedUser = dtoMapper.convertToUser(updatedUserDTO);
+        User updatedUser = dtoMapper.mapToUser(updatedUserDTO);
         updatedUser.setUuid(existingUser.get().getUuid());
-        return handleServiceResult(userService.save(updatedUser), HttpStatus.BAD_REQUEST);
+        List<Role> assignedRoles = userService.findRolesByExternalIdentifier(updatedUserDTO.getAssignedRoles());
+        List<UserRole> toBeSavedUserRoles = dtoMapper.convertFromUserDTO(updatedUser, updatedUserDTO, assignedRoles);
+
+        ServiceResult<User> result = userService.save(updatedUser);
+        userService.saveOrUpdateUserRoles(toBeSavedUserRoles);
+
+        if (!result.isSuccess()) {
+            return buildErrorResponse(HttpStatus.BAD_REQUEST, result.getApiError());
+        }
+
+        UserDTO savedUser = dtoMapper.mapToUserDTO(result.getData());
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @DeleteMapping("/{externalIdentifier}")
@@ -109,7 +142,19 @@ public class UserController {
                     new ApiError("User not found with externalIdentifier: " + externalIdentifier, ApiErrorSeverity.INFO));
         }
 
-        return handleServiceResult(userService.deleteById(existingUser.get().getUuid()), HttpStatus.INTERNAL_SERVER_ERROR);
+        // First, delete the associated user roles before deleting the user itself
+        ServiceResult<UserRole> userRoleDeleteResult = userRoleService.deleteByUuid(existingUser.get().getUuid());
+        if (!userRoleDeleteResult.isSuccess()) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, userRoleDeleteResult.getApiError());
+        }
+    
+        // Now, delete the user after removing its roles
+        ServiceResult<Void> userDeleteResult = userService.deleteById(existingUser.get().getUuid());
+        if (!userDeleteResult.isSuccess()) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, userDeleteResult.getApiError());
+        }
+
+        return ResponseEntity.noContent().build();
     }
 
     /**
