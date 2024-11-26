@@ -51,6 +51,8 @@ dependencies {
 
     // Other libraries
     implementation("net.datafaker:datafaker:2.4.1")
+    implementation("org.netbeans.external:org-apache-commons-lang3:RELEASE130")
+    implementation("org.netbeans.external:org-apache-commons-io:RELEASE113")
 }
 
 

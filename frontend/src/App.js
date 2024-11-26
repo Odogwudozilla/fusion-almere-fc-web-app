@@ -7,6 +7,7 @@ import ContactUs from './pages/ContactUs'; // Contact Us page
 import RoleManagement from './components/screens/role/RoleManagement';
 import PermissionManagement from "./components/screens/permission/PermissionManagement";
 import UserManagement from "./components/screens/user/UserManagement";
+import ProfileManagement from './components/screens/profile/ProfileManagement';
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                   <Route path="/admin/roles" element={<RoleManagement />} />
                   <Route path="/admin/permissions" element={<PermissionManagement />} />
                   <Route path="/admin/users" element={<UserManagement />} />
+                  <Route path="/users/:hashedId/*" element={<ProfileManagement />} />
               </Routes>
           </Layout>
       </Router>

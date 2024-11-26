@@ -18,10 +18,36 @@
 .list-item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
+    gap: 10px; /* Adds spacing between wrapped items */
 }
+
+.list-item > * {
+    flex: 1; /* Allows items to share available space */
+    min-width: 100px; /* Prevents items from shrinking too much */
+}
+
+@media (max-width: 768px) {
+    .list-item {
+        font-size: 0.9rem;
+    }
+
+    .list-table th,
+    .list-table td {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .list-item {
+        flex-direction: column; /* Stack items vertically on very small screens */
+        align-items: flex-start;
+    }
+}
+
 
 .list-item:last-child {
     border-bottom: none;
@@ -57,6 +83,7 @@
 
 .list-table {
     width: 100%;
+    table-layout: auto; /* Allows dynamic column width based on content */
     border-collapse: collapse;
     margin-top: 10px;
 }
@@ -66,7 +93,9 @@
     padding: 10px;
     text-align: left;
     border: 1px solid #ddd;
+    word-wrap: break-word; /* Ensures text wraps instead of overflowing */
 }
+
 
 .list-table th {
     background-color: #f4f4f4;
@@ -84,6 +113,16 @@
     display: flex;
     gap: 10px;
 }
+
+details summary {
+    cursor: pointer;
+    font-style: italic;
+}
+
+details summary::-webkit-details-marker {
+    color: #007bff; /* Customize marker color */
+}
+
 
 .custom-checkbox {
     display: flex;

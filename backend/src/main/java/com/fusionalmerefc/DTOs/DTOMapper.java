@@ -4,25 +4,28 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
-import com.fusionalmerefc.model.Permission;
-import com.fusionalmerefc.model.Role;
-import com.fusionalmerefc.model.RolePermission;
-import com.fusionalmerefc.model.User;
-import com.fusionalmerefc.model.UserRole;
+import com.fusionalmerefc.model.*;
 import com.fusionalmerefc.model.constants.MembershipType;
 import com.fusionalmerefc.model.constants.StatusType;
 import com.fusionalmerefc.service.impl.RoleServiceImpl;
 import com.fusionalmerefc.service.impl.UserServiceImpl;
 
+/**
+ * A utility class for mapping between DTOs and entities.
+ */
 @Component
 public class DTOMapper {
 
+    // --- Role Conversion Methods ---
+
     /**
      * Converts a RoleDTO to a Role entity.
-     * @param roleDTO The RoleDTO to convert.
-     * @return The corresponding Role entity.
+     *
+     * @param roleDTO the RoleDTO to convert.
+     * @return the corresponding Role entity, or null if the input is null.
      */
     public Role convertToRole(RoleDTO roleDTO) {
         if (roleDTO == null) {
@@ -35,8 +38,9 @@ public class DTOMapper {
 
     /**
      * Converts a Role entity to a RoleDTO.
-     * @param role The Role entity to convert.
-     * @return The corresponding RoleDTO.
+     *
+     * @param role the Role entity to convert.
+     * @return the corresponding RoleDTO, or null if the input is null.
      */
     public RoleDTO convertToRoleDTO(Role role) {
         if (role == null) {
@@ -48,9 +52,10 @@ public class DTOMapper {
     }
 
     /**
-     * Updates an existing Role entity from a RoleDTO.
-     * @param existingRole The Role entity to update.
-     * @param updatedRoleDTO The RoleDTO containing the updated data.
+     * Updates an existing Role entity with data from a RoleDTO.
+     *
+     * @param existingRole   the Role entity to update.
+     * @param updatedRoleDTO the RoleDTO containing the updated data.
      */
     public void updateRoleFromDTO(Role existingRole, RoleDTO updatedRoleDTO) {
         if (existingRole == null || updatedRoleDTO == null) {
@@ -61,10 +66,11 @@ public class DTOMapper {
 
     /**
      * Converts a RoleDTO and a list of Permissions into RolePermission entities.
-     * @param role The Role entity associated with the permissions.
-     * @param roleDTO The RoleDTO containing the permissions.
-     * @param permissions The list of Permission entities.
-     * @return A list of RolePermission entities.
+     *
+     * @param role        the Role entity associated with the permissions.
+     * @param roleDTO     the RoleDTO containing the permissions.
+     * @param permissions the list of Permission entities.
+     * @return a list of RolePermission entities.
      */
     public List<RolePermission> convertFromRoleDTO(Role role, RoleDTO roleDTO, List<Permission> permissions) {
         if (role == null || roleDTO == null || permissions == null) {
@@ -75,34 +81,24 @@ public class DTOMapper {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Converts a UserDTO and a list of Roles into UserRole entities.
-     * @param user The User entity associated with the permissions.
-     * @param roleDTO The UserDTO containing the roles.
-     * @param roles The list of Role entities.
-     * @return A list of UserRoles entities.
-     */
-    public List<UserRole> convertFromUserDTO(User user, UserDTO userDTO, List<Role> roles) {
-        if (user == null || userDTO == null || roles == null) {
-            return Collections.emptyList();
-        }
-        return roles.stream()
-                .map(role -> createUserRole(user, role))
-                .collect(Collectors.toList());
+    public List<RoleDTO> mapRolesToRoleDTO(List<Role> assignedRoles) {
+        return assignedRoles.stream()
+            .map(role -> convertToRoleDTO(role))
+            .collect(Collectors.toList());
     }
 
     // --- User Conversion Methods ---
 
     /**
      * Converts a UserDTO to a User entity.
-     * @param userDTO The UserDTO to convert.
-     * @return The corresponding User entity.
+     *
+     * @param userDTO the UserDTO to convert.
+     * @return the corresponding User entity, or null if the input is null.
      */
     public User mapToUser(UserDTO userDTO) {
         if (userDTO == null) {
             return null;
         }
-
         User user = new User();
         user.setExternalIdentifier(userDTO.getExternalIdentifier());
         user.setName(userDTO.getName());
@@ -113,23 +109,22 @@ public class DTOMapper {
         user.setPostcode(userDTO.getPostcode());
         user.setAddress(userDTO.getAddress());
         user.setProfilePictureUrl(userDTO.getProfilePictureUrl());
+        user.setActivatedAt(userDTO == null ? LocalDateTime.now() : userDTO.getActivatedAt());
         user.setMembershipType(matchToEnum(userDTO.getMembershipType(), MembershipType.class));
-        user.setActivatedAt(LocalDateTime.now());
         user.setStatus(matchToEnum(userDTO.getStatus(), StatusType.class));
-
         return user;
     }
 
     /**
-     * Converts a UserDTO to a User entity.
-     * @param user The User to convert.
-     * @return The corresponding UserDTO entity.
+     * Converts a User entity to a UserDTO.
+     *
+     * @param user the User entity to convert.
+     * @return the corresponding UserDTO, or null if the input is null.
      */
     public UserDTO mapToUserDTO(User user) {
         if (user == null) {
             return null;
         }
-
         UserDTO userDTO = new UserDTO();
         userDTO.setExternalIdentifier(user.getExternalIdentifier());
         userDTO.setName(user.getName());
@@ -141,45 +136,55 @@ public class DTOMapper {
         userDTO.setAddress(user.getAddress());
         userDTO.setProfilePictureUrl(user.getProfilePictureUrl());
         userDTO.setMembershipType(user.getMembershipType().toString());
-        userDTO.setActivatedAt(LocalDateTime.now());
+        userDTO.setActivatedAt(user.getActivatedAt());
         userDTO.setStatus(user.getStatus().toString());
-
         return userDTO;
     }
 
     /**
-     * Helper method to convert a list of RoleDTOs to Role entities.
-     * @param roleDTOs The list of RoleDTOs.
-     * @return A list of Role entities.
+     * Converts a UserDTO and a list of Roles into UserRole entities.
+     *
+     * @param user     the User entity associated with the roles.
+     * @param userDTO  the UserDTO containing the roles.
+     * @param roles    the list of Role entities.
+     * @return a list of UserRole entities.
      */
-    private List<Role> convertToRoles(List<RoleDTO> roleDTOs) {
-        if (roleDTOs == null) {
+    public List<UserRole> convertFromUserDTO(User user, UserDTO userDTO, List<Role> roles) {
+        if (user == null || userDTO == null || roles == null) {
             return Collections.emptyList();
         }
-        return roleDTOs.stream()
-                .map(this::convertToRole)  // Converts each RoleDTO to Role
+        return roles.stream()
+                .map(role -> createUserRole(user, role))
                 .collect(Collectors.toList());
     }
 
     // --- Permission Conversion Methods ---
 
+    /**
+     * Converts a PermissionDTO to a Permission entity.
+     *
+     * @param incomingPermissionDTO the PermissionDTO to convert.
+     * @return the corresponding Permission entity.
+     */
     public Permission convertToPermission(PermissionDTO incomingPermissionDTO) {
+        if (incomingPermissionDTO == null) {
+            return null;
+        }
         Permission permission = new Permission();
-
         permission.setExternalIdentifier(incomingPermissionDTO.getExternalIdentifier());
         permission.setName(incomingPermissionDTO.getName());
         permission.setDescription(incomingPermissionDTO.getDescription());
         permission.setForSuperUserOnly(incomingPermissionDTO.getIsForSuperUserOnly());
-
         return permission;
     }
 
-    // --- Private helper methods ---
+    // --- Helper Methods ---
 
     /**
      * Maps common fields between Role and RoleDTO.
-     * @param source The source object (Role or RoleDTO).
-     * @param target The target object (Role or RoleDTO).
+     *
+     * @param source the source object (Role or RoleDTO).
+     * @param target the target object (Role or RoleDTO).
      */
     private void mapCommonRoleFields(Object source, Object target) {
         if (source instanceof RoleDTO && target instanceof Role) {
@@ -201,9 +206,10 @@ public class DTOMapper {
 
     /**
      * Creates a RolePermission entity.
-     * @param role The Role entity.
-     * @param permission The Permission entity.
-     * @return A RolePermission entity.
+     *
+     * @param role       the Role entity.
+     * @param permission the Permission entity.
+     * @return a RolePermission entity.
      */
     private RolePermission createRolePermission(Role role, Permission permission) {
         RolePermission rolePermission = new RolePermission();
@@ -215,18 +221,28 @@ public class DTOMapper {
 
     /**
      * Creates a UserRole entity.
-     * @param user The User entity.
-     * @param role The Role entity.
-     * @return A UserRole entity.
+     *
+     * @param user the User entity.
+     * @param role the Role entity.
+     * @return a UserRole entity.
      */
     private UserRole createUserRole(User user, Role role) {
-        UserRole userrole = new UserRole();
-        userrole.setUser(user);
-        userrole.setRole(role);
-        userrole.setExternalIdentifier(UserServiceImpl.generateExternalIdentifier(user, role));
-        return userrole;
+        UserRole userRole = new UserRole();
+        userRole.setUser(user);
+        userRole.setRole(role);
+        userRole.setExternalIdentifier(UserServiceImpl.generateExternalIdentifier(user, role));
+        return userRole;
     }
 
+    /**
+     * Matches a string value to an enum constant.
+     *
+     * @param value    the string value.
+     * @param enumType the enum class.
+     * @param <T>      the enum type.
+     * @return the matching enum constant.
+     * @throws IllegalArgumentException if no match is found.
+     */
     public <T extends Enum<T>> T matchToEnum(String value, Class<T> enumType) {
         for (T constant : enumType.getEnumConstants()) {
             if (constant.name().equalsIgnoreCase(value)) {
@@ -235,6 +251,4 @@ public class DTOMapper {
         }
         throw new IllegalArgumentException("Invalid value for enum " + enumType.getSimpleName() + ": " + value);
     }
-
-    
 }

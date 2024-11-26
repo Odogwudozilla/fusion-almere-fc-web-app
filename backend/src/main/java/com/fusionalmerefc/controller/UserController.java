@@ -6,10 +6,8 @@ import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
 import com.fusionalmerefc.model.Role;
-import com.fusionalmerefc.model.RolePermission;
 import com.fusionalmerefc.model.User;
 import com.fusionalmerefc.model.UserRole;
-import com.fusionalmerefc.repository.UserRepository;
 import com.fusionalmerefc.service.UserRoleService;
 import com.fusionalmerefc.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -46,8 +44,9 @@ public class UserController {
         if (!result.isSuccess()) {
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, result.getApiError());
         }
-        ServiceResult<List<UserDTO>> dtoResult = userService.mapToUserToUserDTO(result);
-        return ResponseEntity.ok(dtoResult.getData());
+        ServiceResult<List<UserDTO>> userDtoResult = userService.mapFromUserToUserDTO(result);
+
+        return ResponseEntity.ok(userDtoResult.getData());
     }
 
     @GetMapping("/{externalIdentifier}")
@@ -84,7 +83,8 @@ public class UserController {
             return buildErrorResponse(HttpStatus.BAD_REQUEST, result.getApiError());
         }
 
-        UserDTO savedUser = dtoMapper.mapToUserDTO(result.getData());
+        ServiceResult<UserDTO> savedUser = userService.mapFromSingleUserToUserDTO(result);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
@@ -124,7 +124,8 @@ public class UserController {
             return buildErrorResponse(HttpStatus.BAD_REQUEST, result.getApiError());
         }
 
-        UserDTO savedUser = dtoMapper.mapToUserDTO(result.getData());
+        ServiceResult<UserDTO> savedUser = userService.mapFromSingleUserToUserDTO(result);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
@@ -155,6 +156,63 @@ public class UserController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * ShowProfile endpoint: Retrieve user details for viewing the profile.
+     */
+    @GetMapping("/{externalIdentifier}/profile")
+    public ResponseEntity<?> showProfile(@PathVariable String externalIdentifier) {
+        ServiceResult<Optional<User>> result = userService.findByExternalIdentifier(externalIdentifier);
+
+        if (!result.isSuccess()) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, result.getApiError());
+        }
+
+        Optional<User> user = result.getData();
+        if (user.isEmpty()) {
+            return buildErrorResponse(HttpStatus.NOT_FOUND, 
+                new ApiError("User not found with identifier: " + externalIdentifier, ApiErrorSeverity.INFO));
+        }
+
+        UserDTO userDTO = dtoMapper.mapToUserDTO(user.get());
+        return ResponseEntity.ok(userDTO);
+    }
+
+    /**
+     * EditProfile endpoint: Update user details.
+     */
+    @PutMapping("/{externalIdentifier}/profile")
+    public ResponseEntity<?> editProfile(
+            @PathVariable String externalIdentifier, 
+            @RequestBody UserDTO updatedUserDTO) {
+
+        ServiceResult<Optional<User>> result = userService.findByExternalIdentifier(externalIdentifier);
+
+        if (!result.isSuccess()) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, result.getApiError());
+        }
+
+        Optional<User> userOptional = result.getData();
+        if (userOptional.isEmpty()) {
+            return buildErrorResponse(HttpStatus.NOT_FOUND, 
+                new ApiError("User not found with identifier: " + externalIdentifier, ApiErrorSeverity.INFO));
+        }
+
+        User userToUpdate = userOptional.get();
+
+        // Apply updates only to relevant fields
+        if (updatedUserDTO.getName() != null) userToUpdate.setName(updatedUserDTO.getName());
+        if (updatedUserDTO.getEmail() != null) userToUpdate.setEmail(updatedUserDTO.getEmail());
+        // Add more fields if needed
+
+        ServiceResult<User> updateResult = userService.save(userToUpdate);
+        if (!updateResult.isSuccess()) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, updateResult.getApiError());
+        }
+
+        UserDTO updatedDTO = dtoMapper.mapToUserDTO(updateResult.getData());
+        return ResponseEntity.ok(updatedDTO);
     }
 
     /**

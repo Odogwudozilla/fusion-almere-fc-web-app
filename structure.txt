@@ -1,11 +1,11 @@
 .
 |-- backend
-|   |-- HELP.md
-|   |-- build.gradle.kts
-|   |-- gradle
-|   |   `-- wrapper
-|   |       |-- gradle-wrapper.jar
-|   |       `-- gradle-wrapper.properties
+|   |               `-- HELP.md
+|   |               `-- build.gradle.kts
+|   |               `-- gradle
+|   |               `-- wrapper
+|   |       |       `-- gradle-wrapper.jar
+|   |               `-- gradle-wrapper.properties
 |   |-- gradlew
 |   |-- gradlew.bat
 |   |-- logs
@@ -15,17 +15,21 @@
 |   |   |-- fusion-almere-fc.2024-11-19.log
 |   |   |-- fusion-almere-fc.2024-11-20.log
 |   |   |-- fusion-almere-fc.2024-11-21.log
+|   |   |-- fusion-almere-fc.2024-11-22.log
+|   |   |-- fusion-almere-fc.2024-11-23.log
+|   |   |-- fusion-almere-fc.2024-11-24.log
 |   |   `-- fusion-almere-fc.log
 |   |-- settings.gradle.kts
 |   `-- src
 |       |-- main
-|       |   |-- java
-|       |   |   `-- com
+|       |   |       `-- java
+|       |   |       `-- com
 |       |   |       `-- fusionalmerefc
 |       |   |           |-- DTOs
 |       |   |           |   |-- DTOMapper.java
 |       |   |           |   |-- PermissionDTO.java
-|       |   |           |   `-- RoleDTO.java
+|       |   |           |   |-- RoleDTO.java
+|       |   |           |   `-- UserDTO.java
 |       |   |           |-- FusionAlmereFcApplication.java
 |       |   |           |-- config
 |       |   |           |   |-- ApiError.java
@@ -35,15 +39,22 @@
 |       |   |           |-- controller
 |       |   |           |   |-- FusionAlmereFcController.java
 |       |   |           |   |-- PermissionController.java
-|       |   |           |   `-- RoleController.java
+|       |   |           |   |-- RoleController.java
+|       |   |           |   `-- UserController.java
 |       |   |           |-- model
 |       |   |           |   |-- BaseEntity.java
 |       |   |           |   |-- Permission.java
+|       |   |           |   |-- Position.java
 |       |   |           |   |-- Role.java
 |       |   |           |   |-- RolePermission.java
-|       |   |           |   |-- Status.java
+|       |   |           |   |-- Team.java
+|       |   |           |   |-- TeamMembership.java
 |       |   |           |   |-- User.java
-|       |   |           |   `-- UserRole.java
+|       |   |           |   |-- UserRole.java
+|       |   |           |   `-- constants
+|       |   |           |       |-- MembershipType.java
+|       |   |           |       |-- RoleType.java
+|       |   |           |       `-- StatusType.java
 |       |   |           |-- repository
 |       |   |           |   |-- BaseRepository.java
 |       |   |           |   |-- PermissionRepository.java
@@ -56,12 +67,14 @@
 |       |   |               |-- PermissionService.java
 |       |   |               |-- RolePermissionService.java
 |       |   |               |-- RoleService.java
+|       |   |               |-- UserRoleService.java
 |       |   |               |-- UserService.java
 |       |   |               `-- impl
 |       |   |                   |-- BaseServiceImpl.java
 |       |   |                   |-- PermissionServiceImpl.java
 |       |   |                   |-- RolePermissionServiceImpl.java
 |       |   |                   |-- RoleServiceImpl.java
+|       |   |                   |-- UserRoleServiceImpl.java
 |       |   |                   `-- UserServiceImpl.java
 |       |   `-- resources
 |       |       |-- application-dev.properties
@@ -114,18 +127,25 @@
 |       |   |-- Layout.css
 |       |   |-- Layout.js
 |       |   |-- Notification.js
-|       |   |-- permission
-|       |   |   |-- PermissionForm.js
-|       |   |   |-- PermissionList.js
-|       |   |   `-- PermissionManagement.js
-|       |   |-- role
-|       |   |   |-- RoleForm.js
-|       |   |   |-- RoleList.js
-|       |   |   `-- RoleManagement.js
+|       |   |-- RequiredInput.js
+|       |   |-- screens
+|       |   |   |-- permission
+|       |   |   |   |-- PermissionForm.js
+|       |   |   |   |-- PermissionList.js
+|       |   |   |   `-- PermissionManagement.js
+|       |   |   |-- role
+|       |   |   |   |-- RoleForm.js
+|       |   |   |   |-- RoleList.js
+|       |   |   |   `-- RoleManagement.js
+|       |   |   `-- user
+|       |   |       |-- UserForm.js
+|       |   |       |-- UserList.js
+|       |   |       `-- UserManagement.js
 |       |   `-- styles
 |       |       |-- Form.css
 |       |       |-- List.css
-|       |       `-- Notification.css
+|       |       |-- Notification.css
+|       |       `-- RequiredInput.css
 |       |-- index.css
 |       |-- index.js
 |       |-- logo.svg
@@ -142,7 +162,9 @@
 |   |-- fusion-almere-fc.2024-11-19.log
 |   |-- fusion-almere-fc.2024-11-20.log
 |   |-- fusion-almere-fc.2024-11-21.log
+|   |-- fusion-almere-fc.2024-11-22.log
+|   |-- fusion-almere-fc.2024-11-24.log
 |   `-- fusion-almere-fc.log
 `-- structure.txt
 
-38 directories, 107 files
+41 directories, 126 files

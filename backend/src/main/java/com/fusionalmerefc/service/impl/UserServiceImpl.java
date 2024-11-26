@@ -1,21 +1,19 @@
 package com.fusionalmerefc.service.impl;
 
 import com.fusionalmerefc.DTOs.DTOMapper;
-import com.fusionalmerefc.DTOs.PermissionDTO;
 import com.fusionalmerefc.DTOs.RoleDTO;
 import com.fusionalmerefc.DTOs.UserDTO;
 import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
-import com.fusionalmerefc.model.Permission;
 import com.fusionalmerefc.model.Role;
-import com.fusionalmerefc.model.RolePermission;
 import com.fusionalmerefc.model.User;
 import com.fusionalmerefc.model.UserRole;
 import com.fusionalmerefc.model.constants.StatusType;
 import com.fusionalmerefc.repository.RoleRepository;
 import com.fusionalmerefc.repository.UserRepository;
 import com.fusionalmerefc.repository.UserRoleRepository;
+import com.fusionalmerefc.service.RoleService;
 import com.fusionalmerefc.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -31,14 +29,16 @@ import java.util.stream.Collectors;
 public class UserServiceImpl extends BaseServiceImpl<User, UUID> implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleService roleService;
     private final UserRoleRepository userRoleRepository;
     private final RoleRepository roleRepository;
     
-    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository, RoleService roleService) {
         super(userRepository); 
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     @Override
@@ -76,32 +76,47 @@ public class UserServiceImpl extends BaseServiceImpl<User, UUID> implements User
         return result;
     }
  
-
-    public ServiceResult<List<UserDTO>> mapToUserToUserDTO(ServiceResult<List<User>> resultUsers) {
+    @Override
+    public ServiceResult<List<UserDTO>> mapFromUserToUserDTO(ServiceResult<List<User>> resultUsers) {
         ServiceResult<List<UserDTO>> resultDTO = new ServiceResult<>();
 
-        List<User> roles = resultUsers.getData();
+        List<User> users = resultUsers.getData();
 
-        resultDTO.setData(roles.stream().map(this::mapUserToUserDTO).collect(Collectors.toList()));
+        resultDTO.setData(users.stream().map(this::mapUserToUserDTO).collect(Collectors.toList()));
         resultDTO.setSuccess(resultUsers.isSuccess());
         resultDTO.setApiError(resultUsers.getApiError());
     
         return resultDTO;
     }
 
+    @Override
+    public ServiceResult<UserDTO> mapFromSingleUserToUserDTO(ServiceResult<User> resultUser) {
+        ServiceResult<UserDTO> resultDTO = new ServiceResult<>();
+
+        User user = resultUser.getData();
+
+        resultDTO.setData(mapUserToUserDTO(user));
+        resultDTO.setSuccess(resultUser.isSuccess());
+        resultDTO.setApiError(resultUser.getApiError());
+    
+        return resultDTO;
+    }
+
     public UserDTO mapUserToUserDTO(User user) {
         List<UserRole> userRoles = userRoleRepository.findByUserUuid(user.getUuid());
-
-        List<RoleDTO> assignedRoles = userRoles.stream().map(userRole -> {
-            Role role = userRole.getRole();
-
-            return new DTOMapper().convertToRoleDTO(role);
-            
+        // retrieve all the user assigned roles
+        List<Role> assignedRoles = userRoles.stream().map(userRole -> {
+            return userRole.getRole();
         }).collect(Collectors.toList());
 
+        ServiceResult<List<Role>> roleResult = new ServiceResult<>();
+        roleResult.setData(assignedRoles);
+
+        ServiceResult<List<RoleDTO>> serviceResultDTO = roleService.convertRolesToRoleDTOs(roleResult); 
+    
         // Construct the UserDTO
         UserDTO userDTO = new DTOMapper().mapToUserDTO(user);
-        userDTO.setAssignedRoles(assignedRoles);
+        userDTO.setAssignedRoles(serviceResultDTO.getData());
         return userDTO;
 
     }

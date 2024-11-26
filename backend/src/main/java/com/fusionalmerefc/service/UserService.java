@@ -16,7 +16,8 @@ public interface UserService extends BaseService<User, UUID> {
     ServiceResult<List<User>> saveAll(List<User> users);
     ServiceResult<List<User>> findByStatus(StatusType status);
     ServiceResult<Optional<User>> findByExternalIdentifier(String externalIdentifier);
-    ServiceResult<List<UserDTO>> mapToUserToUserDTO(ServiceResult<List<User>> result);
+    ServiceResult<List<UserDTO>> mapFromUserToUserDTO(ServiceResult<List<User>> result);
     List<Role> findRolesByExternalIdentifier(List<RoleDTO> roleDTOs);
     void saveOrUpdateUserRoles(List<UserRole> toBeSavedUserRoles);
+    ServiceResult<UserDTO> mapFromSingleUserToUserDTO(ServiceResult<User> result);
 }

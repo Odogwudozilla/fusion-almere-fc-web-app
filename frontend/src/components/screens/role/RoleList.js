@@ -62,14 +62,20 @@ const RoleList = ({ onEditClick, notify }) => {
                             {showDescription && <td>{role.description}</td>} {/* Conditionally render Description data */}
                             <td>{role.isSuperUser === true ? "True" : "False"}</td>
                             <td>
-                                {role.assignedPermissions && role.assignedPermissions.length > 0
-                                    ? role.assignedPermissions.map((permission) => (
-                                        <div key={permission.externalIdentifier}>
-                                            {permission.name}
-                                        </div>
-                                    ))
-                                    : "None"}
+                                {role.assignedPermissions && role.assignedPermissions.length > 0 ? (
+                                    <details>
+                                        <summary>Permissions: ({role.assignedPermissions.length})</summary>
+                                        <ul>
+                                            {role.assignedPermissions.map((permission) => (
+                                                <li key={permission.externalIdentifier}>{permission.name}</li>
+                                            ))}
+                                        </ul>
+                                    </details>
+                                ) : (
+                                    "None"
+                                )}
                             </td>
+
                             <td>
                                 <button
                                     onClick={() => onEditClick(role)}

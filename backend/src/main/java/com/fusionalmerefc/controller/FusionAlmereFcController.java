@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class FusionAlmereFcController {
      private static final Logger log = LoggerFactory.getLogger(FusionAlmereFcController.class);
@@ -28,6 +30,15 @@ public class FusionAlmereFcController {
     @GetMapping("/admin/users")
     public String getUsersPage() {
         return "forward:/index.html"; 
+    }
+
+     @GetMapping(value = {"/users/**", "/home", "/about", "/contact"})
+    public String getUserProfilePage(HttpServletRequest request) {
+        // Forward only non-API paths to the frontend
+        if (!request.getRequestURI().startsWith("/api")) {
+            return "forward:/index.html";
+        }
+        return "404"; // Return error if incorrect configuration
     }
     
     @GetMapping("/{path:[^\\.]*}")

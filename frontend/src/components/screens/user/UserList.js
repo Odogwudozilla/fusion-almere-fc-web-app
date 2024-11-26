@@ -45,8 +45,8 @@ const UserList = ({ onEditClick, notify }) => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
                         <th>Username</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
                         <th>WhatsApp</th>
@@ -62,8 +62,8 @@ const UserList = ({ onEditClick, notify }) => {
                     {users.map((user, index) => (
                         <tr key={user.externalIdentifier}>
                             <td>{index + 1}</td>
-                            <td>{user.name}</td>
                             <td>{user.username}</td>
+                            <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>{user.mobileNumber || "N/A"}</td>
                             <td>{user.whatsappNumber || "N/A"}</td>
@@ -71,6 +71,30 @@ const UserList = ({ onEditClick, notify }) => {
                             {showAddressDetails && <td>{user.address || "N/A"}</td>} {/* Conditionally render Address */}
                             <td>{user.membershipType}</td>
                             <td>{user.status}</td>
+                            <td>
+                                {user.assignedRoles && user.assignedRoles.length > 0 ? (
+                                    <ul> Roles:
+                                        {user.assignedRoles.map((role) => (
+                                            <li key={role.externalIdentifier}>
+                                                <details>
+                                                    <summary>{role.name}</summary>
+                                                    {role.assignedPermissions && role.assignedPermissions.length > 0 ? (
+                                                        <ul>Permissions:
+                                                            {role.assignedPermissions.map((permission) => (
+                                                                <li key={permission.externalIdentifier}>{permission.name}</li>
+                                                            ))}
+                                                        </ul>
+                                                    ) : (
+                                                        <div>No Permissions</div>
+                                                    )}
+                                                </details>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    "None"
+                                )}
+                            </td>
                             <td>
                                 <button
                                     onClick={() => onEditClick(user)}
