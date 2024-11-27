@@ -27,7 +27,7 @@ public class UtilityFunctions {
      * @param <U>     Type of the second entity.
      * @return A concatenated identifier in the format "EntityA-EntityB".
      */
-    public static <T extends BaseEntity, U extends BaseEntity> String generateExternalIdentifier(T entityA, U entityB) {
+    public static <T extends BaseEntity, U extends BaseEntity> String generateCombinedExternalIdentifier(T entityA, U entityB) {
         String result = entityA.getExternalIdentifier() + "-" + entityB.getExternalIdentifier();
         log.info("Generated external identifier: {}", result);
         return result;
@@ -82,10 +82,10 @@ public class UtilityFunctions {
      * @param username The username.
      * @return A short unique identifier.
      */
-    public static String generateShortIdentifier(String username) {
+    public static String generateShortIdentifier(String username, int length) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String hashPrefix = Integer.toHexString(username.hashCode());
-        String result = (hashPrefix + uuid).substring(0, 20);
+        String result = (hashPrefix + uuid).substring(0, length);
         log.info("Generated short identifier: {}", result);
         return result;
     }

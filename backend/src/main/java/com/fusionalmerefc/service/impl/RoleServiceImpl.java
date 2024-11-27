@@ -2,6 +2,7 @@ package com.fusionalmerefc.service.impl;
 
 import com.fusionalmerefc.DTOs.PermissionDTO;
 import com.fusionalmerefc.DTOs.RoleDTO;
+import com.fusionalmerefc.Utils.UtilityFunctions;
 import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
@@ -114,7 +115,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, UUID> implements Role
     // Generate external identifier for RolePermission
     public static String generateExternalIdentifier(Role role, Permission permission) {
         // This method could be customized to generate a unique identifier for each RolePermission
-        return role.getExternalIdentifier() + ":" + permission.getExternalIdentifier();
+        return UtilityFunctions.generateCombinedExternalIdentifier(role, permission);
     }
 
     @Override

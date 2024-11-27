@@ -166,9 +166,4 @@ public class UserServiceImpl extends BaseServiceImpl<User, UUID> implements User
         }
     }
 
-    // Generate external identifier for RolePermission
-    public static String generateExternalIdentifier(User user, Role role) {
-        // This method could be customized to generate a unique identifier for each RolePermission
-        return user.getExternalIdentifier() + ":" + role.getExternalIdentifier();
-    }
 }

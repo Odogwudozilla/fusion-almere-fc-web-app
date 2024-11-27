@@ -9,6 +9,8 @@ import com.fusionalmerefc.model.BaseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Random;
+
 class UtilityFunctionsTest {
     private static final Logger log = LoggerFactory.getLogger(UtilityFunctionsTest.class);
 
@@ -30,7 +32,7 @@ class UtilityFunctionsTest {
         TestEntity entityA = new TestEntity("EntityA");
         TestEntity entityB = new TestEntity("EntityB");
 
-        String externalIdentifier = UtilityFunctions.generateExternalIdentifier(entityA, entityB);
+        String externalIdentifier = UtilityFunctions.generateCombinedExternalIdentifier(entityA, entityB);
         log.info("The generated external identifier: {}", externalIdentifier);
         assertEquals("EntityA-EntityB", externalIdentifier);
     }
@@ -66,12 +68,13 @@ class UtilityFunctionsTest {
     @Test
     void testGenerateShortIdentifier() {
         String username = "user123";
+        int length = new Random().nextInt(11) + 10;
 
-        String shortIdentifier = UtilityFunctions.generateShortIdentifier(username);
+        String shortIdentifier = UtilityFunctions.generateShortIdentifier(username, length);
         log.info("Generated short identifier: {}", shortIdentifier);
 
         assertNotNull(shortIdentifier);
-        assertEquals(20, shortIdentifier.length());
+        assertEquals(length, shortIdentifier.length());
     }
 
     @Test

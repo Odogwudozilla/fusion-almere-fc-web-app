@@ -5,13 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import com.fusionalmerefc.Utils.UtilityFunctions;
 import com.fusionalmerefc.model.*;
 import com.fusionalmerefc.model.constants.MembershipType;
 import com.fusionalmerefc.model.constants.StatusType;
 import com.fusionalmerefc.service.impl.RoleServiceImpl;
-import com.fusionalmerefc.service.impl.UserServiceImpl;
 
 /**
  * A utility class for mapping between DTOs and entities.
@@ -109,7 +110,8 @@ public class DTOMapper {
         user.setPostcode(userDTO.getPostcode());
         user.setAddress(userDTO.getAddress());
         user.setProfilePictureUrl(userDTO.getProfilePictureUrl());
-        user.setActivatedAt(userDTO == null ? LocalDateTime.now() : userDTO.getActivatedAt());
+        user.setIdentifierForUrl(UtilityFunctions.generateUniqueIdentifier(userDTO.getUsername(), "FusionUser"));
+        user.setActivatedAt(userDTO.getActivatedAt() == null ? LocalDateTime.now() : userDTO.getActivatedAt());
         user.setMembershipType(matchToEnum(userDTO.getMembershipType(), MembershipType.class));
         user.setStatus(matchToEnum(userDTO.getStatus(), StatusType.class));
         return user;
@@ -230,7 +232,7 @@ public class DTOMapper {
         UserRole userRole = new UserRole();
         userRole.setUser(user);
         userRole.setRole(role);
-        userRole.setExternalIdentifier(UserServiceImpl.generateExternalIdentifier(user, role));
+        userRole.setExternalIdentifier(UtilityFunctions.generateCombinedExternalIdentifier(user, role));
         return userRole;
     }
 
