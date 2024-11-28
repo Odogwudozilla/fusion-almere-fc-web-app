@@ -15,6 +15,10 @@ import com.fusionalmerefc.repository.UserRepository;
 import com.fusionalmerefc.repository.UserRoleRepository;
 import com.fusionalmerefc.service.RoleService;
 import com.fusionalmerefc.service.UserService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -166,4 +170,27 @@ public class UserServiceImpl extends BaseServiceImpl<User, UUID> implements User
         }
     }
 
+    @Override
+    public ServiceResult<Page<User>> findAllWithPagination(int page, int pageSize, String sortField, String sortOrder) {
+        // Convert sortOrder to Sort.Direction (ASC or DESC)
+        Sort.Direction direction;
+        try {
+            direction = Sort.Direction.fromString(sortOrder);
+        } catch (IllegalArgumentException e) {
+            direction = Sort.Direction.ASC; // Default to ASC if sortOrder is invalid
+        }
+    
+        // Create a Pageable object with sorting
+        PageRequest pageable = PageRequest.of(page, pageSize, Sort.by(direction, sortField));
+    
+        // Fetch the paginated data from the repository
+        Page<User> usersPage = userRepository.findAll(pageable);
+    
+        // Wrap the result in a ServiceResult and return it
+        ServiceResult<Page<User>> result = new ServiceResult<>();
+        result.setData(usersPage);
+    
+        return result;
+    }
+    
 }

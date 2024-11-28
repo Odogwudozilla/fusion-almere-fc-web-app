@@ -4,6 +4,7 @@ import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
 import com.fusionalmerefc.model.Permission;
+import com.fusionalmerefc.model.User;
 import com.fusionalmerefc.repository.PermissionRepository;
 import com.fusionalmerefc.service.PermissionService;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +53,12 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission, UUID> imp
         }
         
         return result;
+    }
+
+    @Override
+    public ServiceResult<Page<User>> findAllWithPagination(int page, int pageSize, String sortField, String sortOrder) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAllWithPagination'");
     }
  
 

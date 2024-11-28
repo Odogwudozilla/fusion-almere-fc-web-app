@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
 public interface UserService extends BaseService<User, UUID> {
     ServiceResult<List<User>> saveAll(List<User> users);
     ServiceResult<List<User>> findByStatus(StatusType status);
@@ -20,4 +21,5 @@ public interface UserService extends BaseService<User, UUID> {
     List<Role> findRolesByExternalIdentifier(List<RoleDTO> roleDTOs);
     void saveOrUpdateUserRoles(List<UserRole> toBeSavedUserRoles);
     ServiceResult<UserDTO> mapFromSingleUserToUserDTO(ServiceResult<User> result);
+    
 }

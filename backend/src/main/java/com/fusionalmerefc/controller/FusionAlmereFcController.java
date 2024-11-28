@@ -32,7 +32,7 @@ public class FusionAlmereFcController {
         return "forward:/index.html"; 
     }
 
-     @GetMapping(value = {"/users/**", "/home", "/about", "/contact"})
+     @GetMapping(value = {"/users/**", "/home", "/about", "/contact", "/admin-panel/**"})
     public String getUserProfilePage(HttpServletRequest request) {
         // Forward only non-API paths to the frontend
         if (!request.getRequestURI().startsWith("/api")) {

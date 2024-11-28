@@ -9,6 +9,7 @@ import com.fusionalmerefc.config.ServiceResult;
 import com.fusionalmerefc.model.Permission;
 import com.fusionalmerefc.model.Role;
 import com.fusionalmerefc.model.RolePermission;
+import com.fusionalmerefc.model.User;
 import com.fusionalmerefc.repository.PermissionRepository;
 import com.fusionalmerefc.repository.RolePermissionRepository;
 import com.fusionalmerefc.repository.RoleRepository;
@@ -22,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -203,6 +205,12 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, UUID> implements Role
         if (!toSave.isEmpty()) {
             rolePermissionRepository.saveAll(toSave);
         }
+    }
+
+    @Override
+    public ServiceResult<Page<User>> findAllWithPagination(int page, int pageSize, String sortField, String sortOrder) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAllWithPagination'");
     }
     
 }

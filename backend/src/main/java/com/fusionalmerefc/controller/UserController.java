@@ -10,11 +10,16 @@ import com.fusionalmerefc.model.User;
 import com.fusionalmerefc.model.UserRole;
 import com.fusionalmerefc.service.UserRoleService;
 import com.fusionalmerefc.service.UserService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,6 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final String RESOURCE_LIST_KEY = "users";
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final DTOMapper dtoMapper;
@@ -39,15 +45,48 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers() {
-        ServiceResult<List<User>> result = userService.findAll();
+    public ResponseEntity<?> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "id") String sortField,
+            @RequestParam(defaultValue = "ASC") String sortOrder) {
+
+        // Fetch paginated data with sorting
+        ServiceResult<Page<User>> result = userService.findAllWithPagination(page, pageSize, sortField, sortOrder);
+
         if (!result.isSuccess()) {
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, result.getApiError());
         }
-        ServiceResult<List<UserDTO>> userDtoResult = userService.mapFromUserToUserDTO(result);
 
-        return ResponseEntity.ok(userDtoResult.getData());
+        // Extract the list of users from the Page<User>
+        ServiceResult<List<User>> users = new ServiceResult<>();
+        users.setData(result.getData().getContent());
+
+        // Map the list of users to a list of UserDTOs
+        ServiceResult<List<UserDTO>> userDtoResult = userService.mapFromUserToUserDTO(users);
+
+        // Prepare response
+        long totalItems = result.getData().getTotalElements();
+        int responseSize = result.getData().getContent().size();
+        long start = page * pageSize;
+        long end = start + responseSize - 1; // Adjust end to response size
+
+        // Wrap the paginated data and metadata
+        Map<String, Object> response = new HashMap<>();
+        response.put(RESOURCE_LIST_KEY, userDtoResult.getData());  // Assuming DTOs are in `data`
+        response.put("total", totalItems);
+        response.put("page", page + 1);                 // Return 1-based page index
+        response.put("pageSize", responseSize);         // Return actual page size
+
+        // Add Content-Range header (format: users <start>-<end>/<total>)
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Range", RESOURCE_LIST_KEY + " " + start + "-" + end + "/" + totalItems);
+
+        return ResponseEntity.ok().headers(headers).body(response);
     }
+
+    
+
 
     @GetMapping("/{externalIdentifier}")
     public ResponseEntity<?> getUserByExternalIdentifier(@PathVariable String externalIdentifier) {

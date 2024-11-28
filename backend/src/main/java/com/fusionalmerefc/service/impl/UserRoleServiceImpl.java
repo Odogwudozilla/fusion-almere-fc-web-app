@@ -3,11 +3,13 @@ package com.fusionalmerefc.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.fusionalmerefc.config.ApiError;
 import com.fusionalmerefc.config.ApiErrorSeverity;
 import com.fusionalmerefc.config.ServiceResult;
+import com.fusionalmerefc.model.User;
 import com.fusionalmerefc.model.UserRole;
 import com.fusionalmerefc.repository.UserRoleRepository;
 import com.fusionalmerefc.service.UserRoleService;
@@ -33,6 +35,12 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRole, UUID> impleme
                 result.setApiError(new ApiError("Error deleting user roles: " + e.getMessage(), ApiErrorSeverity.ERROR));
             }
         return result;
+    }
+
+    @Override
+    public ServiceResult<Page<User>> findAllWithPagination(int page, int pageSize, String sortField, String sortOrder) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAllWithPagination'");
     }
 
 
